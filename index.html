@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Obstetrícia -Desenvolvido Orlando Abreu</title>
+    <title>Guia Completo de Obstetrícia - Livro Rápido</title>
     <style>
         :root {
             --primary-color: #1a5d8a;
@@ -13,6 +13,8 @@
             --danger-color: #e74c3c;
             --light-bg: #f5f8fa;
             --card-bg: #ffffff;
+            --sidebar-width: 280px;
+            --header-height: 70px;
         }
 
         * {
@@ -26,64 +28,68 @@
             background-color: var(--light-bg);
             color: #333;
             line-height: 1.6;
+            overflow-x: hidden;
+            padding-top: var(--header-height);
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 300px 1fr 350px;
-            gap: 25px;
-        }
-
-        /* Header */
-        .header {
-            grid-column: 1 / -1;
+        /* ========== HEADER FIXO ========== */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
         }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--accent-color);
         }
 
         .author {
             font-style: italic;
             opacity: 0.9;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
+            font-size: 0.9rem;
         }
 
-        .search-box {
-            background: rgba(255,255,255,0.15);
-            padding: 12px 20px;
-            border-radius: 50px;
+        .search-container {
             display: flex;
             align-items: center;
-            max-width: 600px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50px;
+            padding: 8px 20px;
+            width: 400px;
         }
 
-        .search-box input {
+        .search-container input {
             flex: 1;
             background: transparent;
             border: none;
             color: white;
-            font-size: 1rem;
-            padding: 5px 15px;
+            padding: 5px 10px;
             outline: none;
         }
 
-        .search-box input::placeholder {
+        .search-container input::placeholder {
             color: rgba(255,255,255,0.7);
         }
 
-        .search-box button {
+        .search-container button {
             background: var(--accent-color);
             border: none;
             color: white;
@@ -94,104 +100,138 @@
             transition: background 0.3s;
         }
 
-        .search-box button:hover {
+        .search-container button:hover {
             background: #219653;
         }
 
-        /* Sidebar Navigation */
-        .sidebar {
-            position: sticky;
-            top: 20px;
-            height: calc(100vh - 40px);
-            overflow-y: auto;
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        /* ========== LAYOUT PRINCIPAL ========== */
+        .container {
+            display: flex;
+            min-height: calc(100vh - var(--header-height));
+            position: relative;
         }
 
-        .nav-title {
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--card-bg);
+            border-right: 1px solid #e0e0e0;
+            position: sticky;
+            top: var(--header-height);
+            height: calc(100vh - var(--header-height));
+            overflow-y: auto;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .sidebar-header h2 {
             color: var(--primary-color);
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid var(--secondary-color);
-            font-size: 1.3rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .nav-module {
-            margin-bottom: 15px;
-            border-left: 4px solid transparent;
-            transition: all 0.3s;
+            border-bottom: 1px solid #eee;
         }
 
-        .nav-module.active {
-            border-left-color: var(--secondary-color);
-            background: rgba(44, 139, 217, 0.05);
-        }
-
-        .module-header {
-            padding: 12px 15px;
+        .module-title {
+            padding: 15px 20px;
             background: var(--light-bg);
-            border-radius: 8px;
+            color: var(--primary-color);
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: 600;
-            color: var(--primary-color);
+            transition: background 0.3s;
         }
 
-        .module-header:hover {
+        .module-title:hover {
             background: rgba(44, 139, 217, 0.1);
         }
 
-        .module-subtopics {
-            padding: 10px 15px 10px 30px;
-            display: none;
+        .module-title.active {
+            background: var(--secondary-color);
+            color: white;
         }
 
-        .nav-module.active .module-subtopics {
-            display: block;
+        .module-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .module-content.active {
+            max-height: 1000px;
         }
 
         .subtopic {
-            padding: 8px 0;
+            padding: 12px 20px 12px 40px;
             color: #555;
             cursor: pointer;
-            transition: color 0.3s;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-left: 3px solid transparent;
+            transition: all 0.3s;
+            display: block;
+            text-decoration: none;
         }
 
         .subtopic:hover {
+            background: rgba(44, 139, 217, 0.05);
             color: var(--secondary-color);
+            border-left-color: var(--secondary-color);
         }
 
         .subtopic.active {
+            background: rgba(44, 139, 217, 0.1);
             color: var(--secondary-color);
+            border-left-color: var(--secondary-color);
             font-weight: 600;
         }
 
-        /* Main Content */
+        /* ========== CONTEÚDO PRINCIPAL ========== */
         .main-content {
+            flex: 1;
+            padding: 30px;
+            max-width: calc(100% - var(--sidebar-width));
+            overflow-y: auto;
+            background: var(--light-bg);
+        }
+
+        .content-section {
             background: var(--card-bg);
             border-radius: 15px;
             padding: 30px;
+            margin-bottom: 30px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--secondary-color);
+            animation: fadeIn 0.5s ease;
         }
 
-        .content-header {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 2px solid var(--light-bg);
         }
 
-        .content-title {
+        .section-header h1 {
             color: var(--primary-color);
             font-size: 2rem;
             margin-bottom: 10px;
         }
 
-        .content-category {
+        .section-category {
             display: inline-block;
             background: var(--secondary-color);
             color: white;
@@ -201,21 +241,36 @@
             margin-bottom: 15px;
         }
 
-        .content-card {
-            background: var(--light-bg);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border-left: 5px solid var(--secondary-color);
+        /* ========== PAINEL DIREITO ========== */
+        .right-panel {
+            width: 350px;
+            background: var(--card-bg);
+            border-left: 1px solid #e0e0e0;
+            position: sticky;
+            top: var(--header-height);
+            height: calc(100vh - var(--header-height));
+            overflow-y: auto;
+            padding: 20px;
+            z-index: 100;
         }
 
-        .content-card h3 {
+        .panel-card {
+            background: var(--light-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .panel-card h3 {
             color: var(--primary-color);
             margin-bottom: 15px;
-            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* Medical Content Styles */
+        /* ========== ELEMENTOS DE CONTEÚDO ========== */
         .medical-table {
             width: 100%;
             border-collapse: collapse;
@@ -282,11 +337,6 @@
             margin: 25px 0;
         }
 
-        .calculator-box h4 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
-
         .form-group {
             margin-bottom: 20px;
         }
@@ -321,6 +371,9 @@
             font-weight: 600;
             font-size: 1rem;
             transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-primary {
@@ -346,57 +399,39 @@
             padding: 20px;
             margin-top: 20px;
             display: none;
+            animation: fadeIn 0.5s;
         }
 
         .result-box.show {
             display: block;
-            animation: fadeIn 0.5s;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Right Panel */
-        .right-panel {
-            position: sticky;
-            top: 20px;
-            height: calc(100vh - 40px);
-            overflow-y: auto;
-        }
-
-        .progress-card, .notes-card, .quick-tools-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
+        /* ========== SISTEMA DE PROGRESSO ========== */
         .progress-item {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
-            padding: 12px;
-            background: var(--light-bg);
+            margin-bottom: 12px;
+            padding: 10px;
+            background: white;
             border-radius: 8px;
+            border: 1px solid #e0e0e0;
             transition: all 0.3s;
         }
 
         .progress-item.completed {
             background: rgba(39, 174, 96, 0.1);
-            border-left: 3px solid var(--accent-color);
+            border-color: var(--accent-color);
         }
 
         .progress-item input {
-            margin-right: 15px;
+            margin-right: 12px;
             transform: scale(1.2);
         }
 
         .progress-item label {
             flex: 1;
             cursor: pointer;
+            margin: 0;
         }
 
         .progress-item.completed label {
@@ -414,9 +449,10 @@
             font-weight: 600;
         }
 
+        /* ========== ÁREA DE ANOTAÇÕES ========== */
         .notes-textarea {
             width: 100%;
-            min-height: 200px;
+            min-height: 150px;
             padding: 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -426,66 +462,51 @@
             font-family: inherit;
         }
 
-        .quick-tool {
-            background: var(--light-bg);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .quick-tool:hover {
-            background: rgba(44, 139, 217, 0.1);
-            transform: translateX(5px);
-        }
-
-        .quick-tool i {
-            color: var(--secondary-color);
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-
-        /* Footer */
-        .footer {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 25px;
-            margin-top: 40px;
-            color: #666;
-            border-top: 1px solid #ddd;
-            font-size: 0.9rem;
-        }
-
-        /* Responsive */
+        /* ========== RESPONSIVIDADE ========== */
         @media (max-width: 1200px) {
             .container {
-                grid-template-columns: 250px 1fr;
+                flex-wrap: wrap;
             }
-            .right-panel {
-                grid-column: 1 / -1;
+            
+            .sidebar {
+                width: 100%;
                 height: auto;
                 position: static;
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 25px;
+                max-height: 300px;
+            }
+            
+            .main-content {
+                max-width: 100%;
+                width: 100%;
+            }
+            
+            .right-panel {
+                width: 100%;
+                height: auto;
+                position: static;
+                order: 3;
             }
         }
 
         @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
+            .search-container {
+                display: none;
             }
+            
+            .main-content {
+                padding: 20px 15px;
+            }
+            
+            .content-section {
+                padding: 20px;
+            }
+            
             .sidebar {
-                position: static;
-                height: auto;
-            }
-            .right-panel {
-                grid-template-columns: 1fr;
+                max-height: 250px;
             }
         }
 
-        /* Content specific */
+        /* ========== UTILITÁRIOS ========== */
         .pill {
             display: inline-block;
             padding: 5px 15px;
@@ -510,565 +531,760 @@
             margin-bottom: 10px;
             display: flex;
             align-items: center;
+            gap: 10px;
         }
 
-        .protocol-title i {
-            margin-right: 10px;
+        .quiz-container {
+            background: var(--light-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .quiz-question {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .quiz-option {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(44, 139, 217, 0.1);
+            border-color: var(--secondary-color);
+        }
+
+        .quiz-option.correct {
+            background: rgba(39, 174, 96, 0.2);
+            border-color: var(--accent-color);
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: var(--danger-color);
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            background: var(--card-bg);
+        }
+
+        .footer a {
             color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ========== SCROLLBAR ========== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
+        /* ========== MODO ESCURO ========== */
+        .dark-mode {
+            --light-bg: #1a1a1a;
+            --card-bg: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        .dark-mode .sidebar,
+        .dark-mode .right-panel,
+        .dark-mode .content-section,
+        .dark-mode .medical-table,
+        .dark-mode .calculator-box {
+            background: var(--card-bg);
+            border-color: #444;
+        }
+
+        .dark-mode .medical-table th {
+            background: #333;
+        }
+
+        .dark-mode .medical-table td {
+            border-color: #444;
+        }
+
+        .dark-mode .progress-item {
+            background: #333;
+            border-color: #444;
+        }
+
+        .dark-mode .notes-textarea {
+            background: #333;
+            color: #e0e0e0;
+            border-color: #555;
+        }
+
+        /* ========== BOTÃO MODO ESCURO ========== */
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.1);
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>Guia Completo de Obstetrícia - Gestação</h1>
-            <div class="author">Desenvolvido por Orlando Abreu</div>
-            <p>Material prático e completo para estudantes de medicina e profissionais da saúde</p>
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Buscar por termo, medicamento, protocolo...">
-                <button id="searchBtn"><i class="fas fa-search"></i> Buscar</button>
+    <!-- ========== HEADER ========== -->
+    <header class="main-header">
+        <div class="logo">
+            <i class="fas fa-book-medical"></i>
+            <div>
+                <div>Guia Completo de Obstetrícia</div>
+                <div class="author">Desenvolvido por Orlando Abreu</div>
             </div>
         </div>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar termo, medicamento, protocolo...">
+            <button id="searchBtn">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </div>
+        
+        <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
 
-        <!-- Sidebar Navigation -->
-        <div class="sidebar">
-            <h2 class="nav-title"><i class="fas fa-book-medical"></i> Índice Completo</h2>
-            
+    <!-- ========== CONTAINER PRINCIPAL ========== -->
+    <div class="container">
+        <!-- ========== SIDEBAR DE NAVEGAÇÃO ========== -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-sitemap"></i> Índice Completo</h2>
+            </div>
+
             <!-- Módulo 1 -->
-            <div class="nav-module active" data-module="fundamentos">
-                <div class="module-header">
+            <div class="nav-module">
+                <div class="module-title" data-module="fundamentos">
                     <span>1. Fundamentos e Datas</span>
                     <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="module-subtopics">
-                    <div class="subtopic active" data-section="calculadora">Calculadora IG/DPP</div>
-                    <div class="subtopic" data-section="sinais-alarme">Sinais de Alarme</div>
-                    <div class="subtopic" data-section="rotina">Rotina Pré-Natal</div>
-                    <div class="subtopic" data-section="datacao">Datação Gestacional</div>
+                <div class="module-content" id="fundamentos-content">
+                    <a href="#fundamentos-calculadora" class="subtopic active">Calculadora IG/DPP</a>
+                    <a href="#fundamentos-sinais" class="subtopic">Sinais de Alarme</a>
+                    <a href="#fundamentos-rotina" class="subtopic">Rotina Pré-Natal</a>
+                    <a href="#fundamentos-datacao" class="subtopic">Datação Gestacional</a>
                 </div>
             </div>
 
             <!-- Módulo 2 -->
-            <div class="nav-module" data-module="primeira-consulta">
-                <div class="module-header">
+            <div class="nav-module">
+                <div class="module-title" data-module="primeira-consulta">
                     <span>2. Primeira Consulta</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
-                <div class="module-subtopics">
-                    <div class="subtopic" data-section="anamnese">Anamnese Completa</div>
-                    <div class="subtopic" data-section="exame-fisico">Exame Físico</div>
-                    <div class="subtopic" data-section="exames">Exames Iniciais</div>
-                    <div class="subtopic" data-section="classificacao-risco">Classificação de Risco</div>
+                <div class="module-content" id="primeira-consulta-content">
+                    <a href="#primeira-anamnese" class="subtopic">Anamnese Completa</a>
+                    <a href="#primeira-exame" class="subtopic">Exame Físico</a>
+                    <a href="#primeira-exames" class="subtopic">Exames Iniciais</a>
+                    <a href="#primeira-risco" class="subtopic">Classificação de Risco</a>
                 </div>
             </div>
 
             <!-- Módulo 3 -->
-            <div class="nav-module" data-module="suplementacao">
-                <div class="module-header">
+            <div class="nav-module">
+                <div class="module-title" data-module="suplementacao">
                     <span>3. Suplementação e Vacinas</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
-                <div class="module-subtopics">
-                    <div class="subtopic" data-section="acido-folico">Ácido Fólico</div>
-                    <div class="subtopic" data-section="ferro">Ferro</div>
-                    <div class="subtopic" data-section="outros-suplementos">Outros Suplementos</div>
-                    <div class="subtopic" data-section="vacinas">Esquema Vacinal</div>
+                <div class="module-content" id="suplementacao-content">
+                    <a href="#suplementacao-acido" class="subtopic">Ácido Fólico</a>
+                    <a href="#suplementacao-ferro" class="subtopic">Ferro</a>
+                    <a href="#suplementacao-outros" class="subtopic">Outros Suplementos</a>
+                    <a href="#suplementacao-vacinas" class="subtopic">Esquema Vacinal</a>
                 </div>
             </div>
 
             <!-- Módulo 4 -->
-            <div class="nav-module" data-module="rastreamentos">
-                <div class="module-header">
+            <div class="nav-module">
+                <div class="module-title" data-module="rastreamentos">
                     <span>4. Rastreamentos por Trimestre</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
-                <div class="module-subtopics">
-                    <div class="subtopic" data-section="primeiro-tri">1º Trimestre</div>
-                    <div class="subtopic" data-section="segundo-tri">2º Trimestre</div>
-                    <div class="subtopic" data-section="terceiro-tri">3º Trimestre</div>
-                    <div class="subtopic" data-section="usg">Ultrassons</div>
+                <div class="module-content" id="rastreamentos-content">
+                    <a href="#rastreamentos-primeiro" class="subtopic">1º Trimestre</a>
+                    <a href="#rastreamentos-segundo" class="subtopic">2º Trimestre</a>
+                    <a href="#rastreamentos-terceiro" class="subtopic">3º Trimestre</a>
+                    <a href="#rastreamentos-usg" class="subtopic">Ultrassons</a>
                 </div>
             </div>
 
             <!-- Módulo 5 -->
-            <div class="nav-module" data-module="doencas-hipertensivas">
-                <div class="module-header">
+            <div class="nav-module">
+                <div class="module-title" data-module="doencas-hipertensivas">
                     <span>5. Doenças Hipertensivas</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
-                <div class="module-subtopics">
-                    <div class="subtopic" data-section="has-gestacional">HAS Gestacional</div>
-                    <div class="subtopic" data-section="pre-eclampsia">Pré-eclâmpsia</div>
-                    <div class="subtopic" data-section="eclampsia">Eclâmpsia</div>
-                    <div class="subtopic" data-section="hellp">Síndrome HELLP</div>
-                    <div class="subtopic" data-section="tratamento-dhg">Tratamento</div>
+                <div class="module-content" id="doencas-hipertensivas-content">
+                    <a href="#doencas-has" class="subtopic">HAS Gestacional</a>
+                    <a href="#doencas-preeclampsia" class="subtopic">Pré-eclâmpsia</a>
+                    <a href="#doencas-eclampsia" class="subtopic">Eclâmpsia</a>
+                    <a href="#doencas-hellp" class="subtopic">Síndrome HELLP</a>
+                    <a href="#doencas-tratamento" class="subtopic">Tratamento</a>
                 </div>
             </div>
 
             <!-- Módulo 6 -->
-            <div class="nav-module" data-module="diabetes">
-                <div class="module-header">
+            <div class="nav-module">
+                <div class="module-title" data-module="diabetes">
                     <span>6. Diabetes Gestacional</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
-                <div class="module-subtopics">
-                    <div class="subtopic" data-section="diagnostico-dmg">Diagnóstico</div>
-                    <div class="subtopic" data-section="tratamento-dmg">Tratamento</div>
-                    <div class="subtopic" data-section="complicacoes-dmg">Complicações</div>
-                    <div class="subtopic" data-section="monitorizacao">Monitorização</div>
+                <div class="module-content" id="diabetes-content">
+                    <a href="#diabetes-diagnostico" class="subtopic">Diagnóstico</a>
+                    <a href="#diabetes-tratamento" class="subtopic">Tratamento</a>
+                    <a href="#diabetes-complicacoes" class="subtopic">Complicações</a>
+                    <a href="#diabetes-monitorizacao" class="subtopic">Monitorização</a>
                 </div>
             </div>
 
             <!-- Módulo 7 -->
-            <div class="nav-module" data-module="infeccoes">
-                <div class="module-header">
+            <div class="nav-module">
+                <div class="module-title" data-module="infeccoes">
                     <span>7. Infecções na Gestação</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
-                <div class="module-subtopics">
-                    <div class="subtopic" data-section="torch">Infecções TORCH</div>
-                    <div class="subtopic" data-section="sifilis">Sífilis</div>
-                    <div class="subtopic" data-section="hiv">HIV</div>
-                    <div class="subtopic" data-section="hepatite">Hepatites</div>
-                    <div class="subtopic" data-section="itu">ITU/Bacteriúria</div>
+                <div class="module-content" id="infeccoes-content">
+                    <a href="#infeccoes-torch" class="subtopic">Infecções TORCH</a>
+                    <a href="#infeccoes-sifilis" class="subtopic">Sífilis</a>
+                    <a href="#infeccoes-hiv" class="subtopic">HIV</a>
+                    <a href="#infeccoes-hepatite" class="subtopic">Hepatites</a>
+                    <a href="#infeccoes-itu" class="subtopic">ITU/Bacteriúria</a>
                 </div>
             </div>
 
             <!-- Módulo 8 -->
-            <div class="nav-module" data-module="isoimunizacao">
-                <div class="module-header">
+            <div class="nav-module">
+                <div class="module-title" data-module="isoimunizacao">
                     <span>8. Isoimunização Rh</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
-                <div class="module-subtopics">
-                    <div class="subtopic" data-section="mecanismo">Mecanismo</div>
-                    <div class="subtopic" data-section="prevencao">Prevenção</div>
-                    <div class="subtopic" data-section="diagnostico">Diagnóstico</div>
-                    <div class="subtopic" data-section="conduta">Conduta</div>
+                <div class="module-content" id="isoimunizacao-content">
+                    <a href="#isoimunizacao-mecanismo" class="subtopic">Mecanismo</a>
+                    <a href="#isoimunizacao-prevencao" class="subtopic">Prevenção</a>
+                    <a href="#isoimunizacao-diagnostico" class="subtopic">Diagnóstico</a>
+                    <a href="#isoimunizacao-conduta" class="subtopic">Conduta</a>
                 </div>
             </div>
 
             <!-- Módulo 9 -->
-            <div class="nav-module" data-module="trabalho-parto">
-                <div class="module-header">
+            <div class="nav-module">
+                <div class="module-title" data-module="trabalho-parto">
                     <span>9. Trabalho de Parto</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
-                <div class="module-subtopics">
-                    <div class="subtopic" data-section="diagnostico-tp">Diagnóstico</div>
-                    <div class="subtopic" data-section="fases">Fases do TP</div>
-                    <div class="subtopic" data-section="analgesia">Analgesia</div>
-                    <div class="subtopic" data-section="monitorizacao-tp">Monitorização</div>
+                <div class="module-content" id="trabalho-parto-content">
+                    <a href="#trabalho-diagnostico" class="subtopic">Diagnóstico</a>
+                    <a href="#trabalho-fases" class="subtopic">Fases do TP</a>
+                    <a href="#trabalho-analgesia" class="subtopic">Analgesia</a>
+                    <a href="#trabalho-monitorizacao" class="subtopic">Monitorização</a>
                 </div>
             </div>
 
             <!-- Módulo 10 -->
-            <div class="nav-module" data-module="emergencias">
-                <div class="module-header">
+            <div class="nav-module">
+                <div class="module-title" data-module="emergencias">
                     <span>10. Emergências Obstétricas</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
-                <div class="module-subtopics">
-                    <div class="subtopic" data-section="distocia">Distócias</div>
-                    <div class="subtopic" data-section="hpp">Hemorragia Pós-Parto</div>
-                    <div class="subtopic" data-section="prolapso">Prolapso de Cordão</div>
-                    <div class="subtopic" data-section="sofrimento-fetal">Sofrimento Fetal</div>
+                <div class="module-content" id="emergencias-content">
+                    <a href="#emergencias-distocia" class="subtopic">Distócias</a>
+                    <a href="#emergencias-hpp" class="subtopic">Hemorragia Pós-Parto</a>
+                    <a href="#emergencias-prolapso" class="subtopic">Prolapso de Cordão</a>
+                    <a href="#emergencias-sofrimento" class="subtopic">Sofrimento Fetal</a>
                 </div>
             </div>
 
             <!-- Módulo 11 -->
-            <div class="nav-module" data-module="puerperio">
-                <div class="module-header">
+            <div class="nav-module">
+                <div class="module-title" data-module="puerperio">
                     <span>11. Puerpério</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
-                <div class="module-subtopics">
-                    <div class="subtopic" data-section="cuidados">Cuidados Pós-Parto</div>
-                    <div class="subtopic" data-section="amamentacao">Amamentação</div>
-                    <div class="subtopic" data-section="planejamento">Planejamento Reprodutivo</div>
-                    <div class="subtopic" data-section="complicacoes">Complicações</div>
+                <div class="module-content" id="puerperio-content">
+                    <a href="#puerperio-cuidados" class="subtopic">Cuidados Pós-Parto</a>
+                    <a href="#puerperio-amamentacao" class="subtopic">Amamentação</a>
+                    <a href="#puerperio-planejamento" class="subtopic">Planejamento Reprodutivo</a>
+                    <a href="#puerperio-complicacoes" class="subtopic">Complicações</a>
                 </div>
             </div>
 
             <!-- Módulo 12 -->
-            <div class="nav-module" data-module="farmacia">
-                <div class="module-header">
+            <div class="nav-module">
+                <div class="module-title" data-module="farmacia">
                     <span>12. Farmácia Obstétrica</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
-                <div class="module-subtopics">
-                    <div class="subtopic" data-section="medicamentos">Medicamentos Seguros</div>
-                    <div class="subtopic" data-section="teratogenicos">Teratogênicos</div>
-                    <div class="subtopic" data-section="doses">Doses Comuns</div>
-                    <div class="subtopic" data-section="interacoes">Interações</div>
+                <div class="module-content" id="farmacia-content">
+                    <a href="#farmacia-medicamentos" class="subtopic">Medicamentos Seguros</a>
+                    <a href="#farmacia-teratogenicos" class="subtopic">Teratogênicos</a>
+                    <a href="#farmacia-doses" class="subtopic">Doses Comuns</a>
+                    <a href="#farmacia-interacoes" class="subtopic">Interações</a>
                 </div>
             </div>
-        </div>
+        </aside>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="content-header">
-                <span class="content-category">Fundamentos</span>
-                <h1 class="content-title">Fundamentos e Datas da Gestação</h1>
-                <p>Base do conhecimento obstétrico: datação, cálculo de idade gestacional, sinais de alarme e rotina pré-natal.</p>
-            </div>
-
-            <!-- Seção: Calculadora IG/DPP -->
-            <div class="content-card" id="calculadora-content">
-                <h3><i class="fas fa-calculator"></i> Calculadora de Idade Gestacional e DPP</h3>
+        <!-- ========== CONTEÚDO PRINCIPAL ========== -->
+        <main class="main-content" id="mainContent">
+            <!-- Conteúdo será carregado aqui dinamicamente -->
+            <div class="content-section" id="welcome-section">
+                <div class="section-header">
+                    <span class="section-category">Bem-vindo</span>
+                    <h1>Guia Completo de Obstetrícia</h1>
+                    <p>Material prático e completo para estudantes de medicina e profissionais da saúde</p>
+                </div>
                 
-                <div class="calculator-box">
-                    <h4>Calculadora Completa</h4>
-                    <div class="form-group">
-                        <label for="dum">Data da Última Menstruação (DUM):</label>
-                        <input type="date" id="dum" value="2023-01-01">
+                <div class="alert-box alert-info">
+                    <h3><i class="fas fa-lightbulb"></i> Como usar este guia</h3>
+                    <ul>
+                        <li>Use o índice à esquerda para navegar entre os módulos</li>
+                        <li>Utilize a barra de busca para encontrar termos específicos</li>
+                        <li>Marque seu progresso no painel à direita</li>
+                        <li>Faça anotações pessoais para revisão posterior</li>
+                        <li>Use as calculadoras para cálculos rápidos</li>
+                    </ul>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;">
+                    <div class="protocol-box">
+                        <div class="protocol-title"><i class="fas fa-calendar-check"></i> Pré-Natal Completo</div>
+                        <p>Protocolos de consulta, exames por trimestre, suplementação e vacinas</p>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="ciclo">Duração do ciclo menstrual (dias):</label>
-                        <select id="ciclo">
-                            <option value="28">28 dias (padrão)</option>
-                            <option value="21">21 dias (curto)</option>
-                            <option value="35">35 dias (longo)</option>
-                            <option value="custom">Personalizado</option>
-                        </select>
+                    <div class="protocol-box">
+                        <div class="protocol-title"><i class="fas fa-heartbeat"></i> Intercorrências</div>
+                        <p>Doenças hipertensivas, diabetes gestacional, infecções e emergências</p>
                     </div>
-
-                    <div class="form-group" id="custom-ciclo" style="display: none;">
-                        <label for="ciclo-custom">Digite a duração do ciclo:</label>
-                        <input type="number" id="ciclo-custom" min="21" max="45" value="28">
+                    
+                    <div class="protocol-box">
+                        <div class="protocol-title"><i class="fas fa-baby"></i> Parto e Pós-Parto</div>
+                        <p>Trabalho de parto, analgesia, cuidados no puerpério e amamentação</p>
                     </div>
-
-                    <button class="btn btn-primary" id="calcular-btn">
-                        <i class="fas fa-calculator"></i> Calcular IG e DPP
+                </div>
+                
+                <div class="calculator-box" style="margin-top: 30px;">
+                    <h3><i class="fas fa-calculator"></i> Calculadora Rápida de DPP</h3>
+                    <p>Calcule a data provável do parto e idade gestacional:</p>
+                    <button class="btn btn-primary" id="quickCalcBtn">
+                        <i class="fas fa-calculator"></i> Abrir Calculadora
                     </button>
-
-                    <div class="result-box" id="resultado-calc">
-                        <h4><i class="fas fa-clipboard-check"></i> Resultados</h4>
-                        <div id="resultado-texto"></div>
-                    </div>
-                </div>
-
-                <div class="alert-box alert-info">
-                    <h4><i class="fas fa-lightbulb"></i> Regra de Naegele</h4>
-                    <p><strong>Fórmula:</strong> DPP = DUM + 7 dias - 3 meses + 1 ano</p>
-                    <p>Para ciclos diferentes de 28 dias: ajuste a DPP pela diferença (ex: ciclo de 35 dias = +7 dias).</p>
-                </div>
-
-                <h4>Métodos de Datação</h4>
-                <table class="medical-table">
-                    <tr>
-                        <th>Método</th>
-                        <th>Período Ideal</th>
-                        <th>Precisão</th>
-                        <th>Observações</th>
-                    </tr>
-                    <tr>
-                        <td><strong>USG 1º trimestre (CRL)</strong></td>
-                        <td>6-13 semanas</td>
-                        <td>± 3-5 dias</td>
-                        <td>Método mais preciso - padrão ouro</td>
-                    </tr>
-                    <tr>
-                        <td><strong>USG 2º trimestre</strong></td>
-                        <td>14-27 semanas</td>
-                        <td>± 7-10 dias</td>
-                        <td>Medida da circunferência cefálica</td>
-                    </tr>
-                    <tr>
-                        <td><strong>USG 3º trimestre</strong></td>
-                        <td>28+ semanas</td>
-                        <td>± 14-21 dias</td>
-                        <td>Pouco preciso para datação</td>
-                    </tr>
-                    <tr>
-                        <td><strong>DUM</strong></td>
-                        <td>Conhecida e regular</td>
-                        <td>± 1-2 semanas</td>
-                        <td>Requere ciclo regular de 28 dias</td>
-                    </tr>
-                </table>
-            </div>
-
-            <!-- Seção: Sinais de Alarme -->
-            <div class="content-card" id="sinais-alarme-content" style="display: none;">
-                <h3><i class="fas fa-exclamation-triangle"></i> Sinais de Alarme na Gestação</h3>
-                
-                <div class="alert-box alert-danger">
-                    <h4><i class="fas fa-skull-crossbones"></i> Sinais que Requerem Avaliação Imediata</h4>
-                    <p>Estes sinais indicam possível complicação grave e necessitam de avaliação urgente.</p>
-                </div>
-
-                <table class="medical-table">
-                    <tr>
-                        <th>Sinal/Sintoma</th>
-                        <th>Possíveis Causas</th>
-                        <th>Conduta Imediata</th>
-                        <th>Urgência</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Sangramento vaginal</strong></td>
-                        <td>Abortamento, placenta prévia, descolamento</td>
-                        <td>Avaliar volume, USG emergencial, acesso venoso</td>
-                        <td><span class="pill" style="background:#e74c3c;color:white;">Imediata</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Dor abdominal intensa</strong></td>
-                        <td>Ruptura uterina, apendicite, descolamento</td>
-                        <td>Avaliação cirúrgica, monitorização fetal</td>
-                        <td><span class="pill" style="background:#e74c3c;color:white;">Imediata</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Cefaleia intensa + visão</strong></td>
-                        <td>Pré-eclâmpsia, eclâmpsia, AVC</td>
-                        <td>Medir PA, exames laboratoriais, MgSO4</td>
-                        <td><span class="pill" style="background:#e74c3c;color:white;">Imediata</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Diminuição movimentos fetais</strong></td>
-                        <td>Sofrimento fetal, óbito fetal</td>
-                        <td>Cardiotocografia, perfil biofísico</td>
-                        <td><span class="pill" style="background:#f39c12;color:white;">Urgente</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Ruptura de membranas</strong></td>
-                        <td>Ruptura prematura, infecção</td>
-                        <td>Confirmar ruptura, avaliar infecção</td>
-                        <td><span class="pill" style="background:#f39c12;color:white;">Urgente</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Edema facial súbito</strong></td>
-                        <td>Pré-eclâmpsia, síndrome nefrótica</td>
-                        <td>Avaliar PA, proteinúria, exames</td>
-                        <td><span class="pill" style="background:#f39c12;color:white;">Urgente</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Febre >38°C</strong></td>
-                        <td>Infecção urinária, corioamnionite</td>
-                        <td>Hemoculturas, urocultura, antibióticos</td>
-                        <td><span class="pill" style="background:#3498db;color:white;">Avaliar</span></td>
-                    </tr>
-                </table>
-
-                <div class="protocol-box">
-                    <div class="protocol-title">
-                        <i class="fas fa-clipboard-list"></i> Protocolo de Avaliação de Sinais de Alarme
-                    </div>
-                    <ol>
-                        <li><strong>Avaliação inicial:</strong> Sinais vitais, exame físico, altura uterina</li>
-                        <li><strong>Monitorização fetal:</strong> Ausculta de BCF, cardiotocografia se disponível</li>
-                        <li><strong>Exames básicos:</strong> Hemograma, EAS, função renal/hepática conforme suspeita</li>
-                        <li><strong>Ultrassom:</strong> Avaliar vitalidade fetal, líquido amniótico, placenta</li>
-                        <li><strong>Conduta:</strong> Definir necessidade de internação, tratamento específico</li>
-                    </ol>
                 </div>
             </div>
-
-            <!-- Seção: Rotina Pré-Natal -->
-            <div class="content-card" id="rotina-content" style="display: none;">
-                <h3><i class="fas fa-calendar-check"></i> Rotina do Pré-Natal</h3>
-                
-                <h4>Calendário de Consultas</h4>
-                <table class="medical-table">
-                    <tr>
-                        <th>Idade Gestacional</th>
-                        <th>Frequência</th>
-                        <th>Objetivos Principais</th>
-                        <th>Exames/Procedimentos</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Até 28 semanas</strong></td>
-                        <td>Mensal</td>
-                        <td>Datação, rastreios, prevenção</td>
-                        <td>USG 1º trim, sorologias, hemograma</td>
-                    </tr>
-                    <tr>
-                        <td><strong>28-36 semanas</strong></td>
-                        <td>Quinzenal</td>
-                        <td>Acompanhamento crescimento, DMG</td>
-                        <td>USG morfológico, TOTG, vacinas</td>
-                    </tr>
-                    <tr>
-                        <td><strong>36+ semanas</strong></td>
-                        <td>Semanal</td>
-                        <td>Preparação parto, vigilância final</td>
-                        <td>Strepto B, cardiotocografia</td>
-                    </tr>
-                </table>
-
-                <h4>Checklist por Consulta</h4>
-                <div class="alert-box alert-success">
-                    <h4><i class="fas fa-check-circle"></i> Itens obrigatórios em cada consulta:</h4>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
-                        <div><i class="fas fa-heartbeat"></i> <strong>Aferir PA</strong> - técnica correta</div>
-                        <div><i class="fas fa-weight"></i> <strong>Pesar</strong> - acompanhar ganho ponderal</div>
-                        <div><i class="fas fa-ruler-vertical"></i> <strong>Altura uterina</strong> - crescimento fetal</div>
-                        <div><i class="fas fa-heart"></i> <strong>BCF</strong> - ausculta dos batimentos</div>
-                        <div><i class="fas fa-comment-medical"></i> <strong>Sintomas</strong> - questionar sinais de alarme</div>
-                        <div><i class="fas fa-pills"></i> <strong>Medicações</strong> - revisar adesão</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Conteúdo será carregado dinamicamente para outras seções -->
+            
+            <!-- Área onde o conteúdo específico será carregado -->
             <div id="dynamic-content"></div>
-        </div>
+        </main>
 
-        <!-- Right Panel -->
-        <div class="right-panel">
-            <!-- Progress Card -->
-            <div class="progress-card">
-                <h3><i class="fas fa-tasks"></i> Seu Progresso</h3>
-                <p>Marque os módulos estudados:</p>
+        <!-- ========== PAINEL DIREITO ========== -->
+        <aside class="right-panel">
+            <!-- Calculadoras -->
+            <div class="panel-card">
+                <h3><i class="fas fa-calculator"></i> Calculadoras</h3>
                 
-                <div class="progress-item completed">
-                    <input type="checkbox" id="mod1" checked>
-                    <label for="mod1">1. Fundamentos e Datas</label>
+                <div class="form-group">
+                    <label>DPP (Regra de Naegele)</label>
+                    <input type="date" id="dumInput" class="form-control">
                 </div>
-                <div class="progress-item">
-                    <input type="checkbox" id="mod2">
-                    <label for="mod2">2. Primeira Consulta</label>
+                
+                <div class="form-group">
+                    <label>Ciclo (dias)</label>
+                    <select id="cycleLength" class="form-control">
+                        <option value="28">28 dias</option>
+                        <option value="21">21 dias</option>
+                        <option value="35">35 dias</option>
+                    </select>
                 </div>
-                <div class="progress-item">
-                    <input type="checkbox" id="mod3">
-                    <label for="mod3">3. Suplementação e Vacinas</label>
+                
+                <button class="btn btn-success" id="calcDPPBtn" style="width: 100%;">
+                    <i class="fas fa-calculator"></i> Calcular
+                </button>
+                
+                <div class="result-box" id="dppResult"></div>
+            </div>
+            
+            <!-- Progresso -->
+            <div class="panel-card">
+                <h3><i class="fas fa-tasks"></i> Seu Progresso</h3>
+                <div id="progress-container">
+                    <!-- Progresso será carregado aqui -->
                 </div>
-                <div class="progress-item">
-                    <input type="checkbox" id="mod4">
-                    <label for="mod4">4. Rastreamentos</label>
-                </div>
-                <div class="progress-item">
-                    <input type="checkbox" id="mod5">
-                    <label for="mod5">5. Doenças Hipertensivas</label>
-                </div>
-                <div class="progress-item">
-                    <input type="checkbox" id="mod6">
-                    <label for="mod6">6. Diabetes Gestacional</label>
-                </div>
-                <div class="progress-item">
-                    <input type="checkbox" id="mod7">
-                    <label for="mod7">7. Infecções na Gestação</label>
-                </div>
-                <div class="progress-item">
-                    <input type="checkbox" id="mod8">
-                    <label for="mod8">8. Isoimunização Rh</label>
-                </div>
-                <div class="progress-item">
-                    <input type="checkbox" id="mod9">
-                    <label for="mod9">9. Trabalho de Parto</label>
-                </div>
-                <div class="progress-item">
-                    <input type="checkbox" id="mod10">
-                    <label for="mod10">10. Emergências</label>
-                </div>
-                <div class="progress-item">
-                    <input type="checkbox" id="mod11">
-                    <label for="mod11">11. Puerpério</label>
-                </div>
-                <div class="progress-item">
-                    <input type="checkbox" id="mod12">
-                    <label for="mod12">12. Farmácia Obstétrica</label>
-                </div>
-
-                <div class="progress-summary">
-                    Progresso: <span id="progress-percent">8%</span>
+                <div class="progress-summary" id="progress-summary">
+                    Progresso: 0%
                 </div>
             </div>
-
-            <!-- Notes Card -->
-            <div class="notes-card">
-                <h3><i class="fas fa-edit"></i> Suas Anotações</h3>
-                <textarea class="notes-textarea" id="notes-area" placeholder="Digite suas anotações aqui..."></textarea>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-success" id="save-notes-btn">
+            
+            <!-- Anotações -->
+            <div class="panel-card">
+                <h3><i class="fas fa-edit"></i> Anotações</h3>
+                <textarea class="notes-textarea" id="notesTextarea" placeholder="Digite suas anotações aqui..."></textarea>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="btn btn-primary" id="saveNotesBtn" style="flex: 1;">
                         <i class="fas fa-save"></i> Salvar
                     </button>
-                    <button class="btn" style="background:#95a5a6;color:white;" id="clear-notes-btn">
+                    <button class="btn" id="clearNotesBtn" style="flex: 1; background: #95a5a6; color: white;">
                         <i class="fas fa-trash"></i> Limpar
                     </button>
                 </div>
             </div>
-
-            <!-- Quick Tools -->
-            <div class="quick-tools-card">
-                <h3><i class="fas fa-tools"></i> Ferramentas Rápidas</h3>
-                
-                <div class="quick-tool" id="calc-imc">
-                    <i class="fas fa-weight"></i>
-                    <span>Calculadora de IMC</span>
-                </div>
-                
-                <div class="quick-tool" id="calc-medicamento">
-                    <i class="fas fa-pills"></i>
-                    <span>Calculadora de Doses</span>
-                </div>
-                
-                <div class="quick-tool" id="gerar-checklist">
-                    <i class="fas fa-clipboard-list"></i>
-                    <span>Gerar Checklist</span>
-                </div>
-                
-                <div class="quick-tool" id="teste-conhecimento">
-                    <i class="fas fa-question-circle"></i>
-                    <span>Teste Rápido</span>
+            
+            <!-- Ferramentas Rápidas -->
+            <div class="panel-card">
+                <h3><i class="fas fa-tools"></i> Ferramentas</h3>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button class="btn" id="imcCalcBtn" style="background: #f39c12; color: white;">
+                        <i class="fas fa-weight"></i> Calculadora IMC
+                    </button>
+                    <button class="btn" id="medCalcBtn" style="background: #9b59b6; color: white;">
+                        <i class="fas fa-pills"></i> Doses de Medicamentos
+                    </button>
+                    <button class="btn" id="quizBtn" style="background: #1abc9c; color: white;">
+                        <i class="fas fa-question-circle"></i> Teste Rápido
+                    </button>
                 </div>
             </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <p><strong>Guia Completo de Obstetrícia - Desenvolvido por Orlando Abreu</strong></p>
-            <p>Material para fins educacionais. Em situações clínicas, siga sempre os protocolos do seu serviço.</p>
-            <p>Baseado em diretrizes do Ministério da Saúde, ACOG, OMS e protocolos nacionais | 2023</p>
-        </div>
+        </aside>
     </div>
 
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <p><strong>Guia Completo de Obstetrícia - Desenvolvido por Orlando Abreu</strong></p>
+        <p>Material para fins educacionais. Em situações clínicas, siga sempre os protocolos do seu serviço.</p>
+        <p>Baseado em diretrizes do Ministério da Saúde, ACOG, OMS e protocolos nacionais | Atualizado em 2023</p>
+    </footer>
+
+    <!-- ========== JAVASCRIPT COMPLETO ========== -->
     <script>
         // Conteúdo médico completo para todos os módulos
         const medicalContent = {
-            // Módulo 1: Fundamentos e Datas
             'fundamentos': {
-                'calculadora': `
-                    <div class="content-card">
-                        <h3><i class="fas fa-calculator"></i> Calculadora de Idade Gestacional e DPP</h3>
-                        <p>Ferramenta para cálculo preciso da idade gestacional e data provável do parto.</p>
-                    </div>
-                `,
-                'sinais-alarme': `
-                    <div class="content-card">
-                        <h3><i class="fas fa-exclamation-triangle"></i> Sinais de Alarme na Gestação</h3>
-                        <p>Sinais e sintomas que indicam necessidade de avaliação urgente.</p>
-                    </div>
-                `,
-                'rotina': `
-                    <div class="content-card">
-                        <h3><i class="fas fa-calendar-check"></i> Rotina do Pré-Natal</h3>
-                        <p>Calendário completo de consultas e procedimentos por trimestre.</p>
-                    </div>
-                `,
-                'datacao': `
-                    <div class="content-card">
-                        <h3><i class="fas fa-calendar-alt"></i> Datação Gestacional</h3>
-                        <p>Métodos precisos para determinar a idade gestacional.</p>
-                    </div>
-                `
-            },
-            // Módulo 2: Primeira Consulta
-            'primeira-consulta': {
-                'anamnese': `
-                    <div class="content-card">
-                        <h3><i class="fas fa-comment-medical"></i> Anamnese Obstétrica Completa</h3>
+                'calculadora': {
+                    title: 'Calculadora de Idade Gestacional e DPP',
+                    category: 'Fundamentos',
+                    content: `
+                        <div class="calculator-box">
+                            <h4><i class="fas fa-calculator"></i> Calculadora Completa</h4>
+                            <div class="form-group">
+                                <label for="dum">Data da Última Menstruação (DUM):</label>
+                                <input type="date" id="dum" value="${new Date().toISOString().split('T')[0]}">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="ciclo">Duração do ciclo menstrual (dias):</label>
+                                <select id="ciclo">
+                                    <option value="28">28 dias (padrão)</option>
+                                    <option value="21">21 dias (curto)</option>
+                                    <option value="35">35 dias (longo)</option>
+                                    <option value="custom">Personalizado</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" id="custom-ciclo" style="display: none;">
+                                <label for="ciclo-custom">Digite a duração do ciclo:</label>
+                                <input type="number" id="ciclo-custom" min="21" max="45" value="28">
+                            </div>
+
+                            <button class="btn btn-primary" id="calcular-btn">
+                                <i class="fas fa-calculator"></i> Calcular IG e DPP
+                            </button>
+
+                            <div class="result-box" id="resultado-calc">
+                                <h4><i class="fas fa-clipboard-check"></i> Resultados</h4>
+                                <div id="resultado-texto"></div>
+                            </div>
+                        </div>
+
                         <div class="alert-box alert-info">
-                            <h4><i class="fas fa-clipboard-check"></i> Itens Essenciais</h4>
+                            <h4><i class="fas fa-lightbulb"></i> Regra de Naegele</h4>
+                            <p><strong>Fórmula:</strong> DPP = DUM + 7 dias - 3 meses + 1 ano</p>
+                            <p>Para ciclos diferentes de 28 dias: ajuste a DPP pela diferença (ex: ciclo de 35 dias = +7 dias).</p>
+                        </div>
+
+                        <h4>Métodos de Datação</h4>
+                        <table class="medical-table">
+                            <tr>
+                                <th>Método</th>
+                                <th>Período Ideal</th>
+                                <th>Precisão</th>
+                                <th>Observações</th>
+                            </tr>
+                            <tr>
+                                <td><strong>USG 1º trimestre (CRL)</strong></td>
+                                <td>6-13 semanas</td>
+                                <td>± 3-5 dias</td>
+                                <td>Método mais preciso - padrão ouro</td>
+                            </tr>
+                            <tr>
+                                <td><strong>USG 2º trimestre</strong></td>
+                                <td>14-27 semanas</td>
+                                <td>± 7-10 dias</td>
+                                <td>Medida da circunferência cefálica</td>
+                            </tr>
+                            <tr>
+                                <td><strong>USG 3º trimestre</strong></td>
+                                <td>28+ semanas</td>
+                                <td>± 14-21 dias</td>
+                                <td>Pouco preciso para datação</td>
+                            </tr>
+                            <tr>
+                                <td><strong>DUM</strong></td>
+                                <td>Conhecida e regular</td>
+                                <td>± 1-2 semanas</td>
+                                <td>Requere ciclo regular de 28 dias</td>
+                            </tr>
+                        </table>
+
+                        <h4>Idade Gestacional por Trimestre</h4>
+                        <table class="medical-table">
+                            <tr>
+                                <th>Trimestre</th>
+                                <th>Semanas</th>
+                                <th>Marcos Importantes</th>
+                            </tr>
+                            <tr>
+                                <td><strong>1º Trimestre</strong></td>
+                                <td>1-13 semanas</td>
+                                <td>Órgãos formados, risco de aborto diminui após 12s</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2º Trimestre</strong></td>
+                                <td>14-27 semanas</td>
+                                <td>Movimentos fetais perceptíveis, viabilidade a partir de 24s</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3º Trimestre</strong></td>
+                                <td>28-40+ semanas</td>
+                                <td>Amadurecimento pulmonar, ganho de peso fetal</td>
+                            </tr>
+                        </table>
+                    `
+                },
+                'sinais': {
+                    title: 'Sinais de Alarme na Gestação',
+                    category: 'Fundamentos',
+                    content: `
+                        <div class="alert-box alert-danger">
+                            <h4><i class="fas fa-skull-crossbones"></i> Sinais que Requerem Avaliação Imediata</h4>
+                            <p>Estes sinais indicam possível complicação grave e necessitam de avaliação urgente.</p>
+                        </div>
+
+                        <table class="medical-table">
+                            <tr>
+                                <th>Sinal/Sintoma</th>
+                                <th>Possíveis Causas</th>
+                                <th>Conduta Imediata</th>
+                                <th>Urgência</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Sangramento vaginal</strong></td>
+                                <td>Abortamento, placenta prévia, descolamento</td>
+                                <td>Avaliar volume, USG emergencial, acesso venoso</td>
+                                <td><span class="pill" style="background:#e74c3c;color:white;">Imediata</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dor abdominal intensa</strong></td>
+                                <td>Ruptura uterina, apendicite, descolamento</td>
+                                <td>Avaliação cirúrgica, monitorização fetal</td>
+                                <td><span class="pill" style="background:#e74c3c;color:white;">Imediata</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cefaleia intensa + visão</strong></td>
+                                <td>Pré-eclâmpsia, eclâmpsia, AVC</td>
+                                <td>Medir PA, exames laboratoriais, MgSO4</td>
+                                <td><span class="pill" style="background:#e74c3c;color:white;">Imediata</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Diminuição movimentos fetais</strong></td>
+                                <td>Sofrimento fetal, óbito fetal</td>
+                                <td>Cardiotocografia, perfil biofísico</td>
+                                <td><span class="pill" style="background:#f39c12;color:white;">Urgente</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ruptura de membranas</strong></td>
+                                <td>Ruptura prematura, infecção</td>
+                                <td>Confirmar ruptura, avaliar infecção</td>
+                                <td><span class="pill" style="background:#f39c12;color:white;">Urgente</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Edema facial súbito</strong></td>
+                                <td>Pré-eclâmpsia, síndrome nefrótica</td>
+                                <td>Avaliar PA, proteinúria, exames</td>
+                                <td><span class="pill" style="background:#f39c12;color:white;">Urgente</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Febre >38°C</strong></td>
+                                <td>Infecção urinária, corioamnionite</td>
+                                <td>Hemoculturas, urocultura, antibióticos</td>
+                                <td><span class="pill" style="background:#3498db;color:white;">Avaliar</span></td>
+                            </tr>
+                        </table>
+
+                        <div class="protocol-box">
+                            <div class="protocol-title">
+                                <i class="fas fa-clipboard-list"></i> Protocolo de Avaliação de Sinais de Alarme
+                            </div>
+                            <ol>
+                                <li><strong>Avaliação inicial:</strong> Sinais vitais, exame físico, altura uterina</li>
+                                <li><strong>Monitorização fetal:</strong> Ausculta de BCF, cardiotocografia se disponível</li>
+                                <li><strong>Exames básicos:</strong> Hemograma, EAS, função renal/hepática conforme suspeita</li>
+                                <li><strong>Ultrassom:</strong> Avaliar vitalidade fetal, líquido amniótico, placenta</li>
+                                <li><strong>Conduta:</strong> Definir necessidade de internação, tratamento específico</li>
+                            </ol>
+                        </div>
+
+                        <h4>Fluxograma de Conduta</h4>
+                        <div class="alert-box alert-warning">
+                            <p><strong>1. Avaliação Inicial:</strong> Triagem rápida - verificar sinais vitais, sangramento ativo</p>
+                            <p><strong>2. Estabilização:</strong> Acesso venoso, oxigênio se necessário, posicionamento</p>
+                            <p><strong>3. Diagnóstico:</strong> Exames complementares conforme suspeita</p>
+                            <p><strong>4. Tratamento:</strong> Específico para a causa identificada</p>
+                            <p><strong>5. Encaminhamento:</strong> Para serviço de referência se necessário</p>
+                        </div>
+                    `
+                },
+                'rotina': {
+                    title: 'Rotina do Pré-Natal',
+                    category: 'Fundamentos',
+                    content: `
+                        <h4>Calendário de Consultas</h4>
+                        <table class="medical-table">
+                            <tr>
+                                <th>Idade Gestacional</th>
+                                <th>Frequência</th>
+                                <th>Objetivos Principais</th>
+                                <th>Exames/Procedimentos</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Até 28 semanas</strong></td>
+                                <td>Mensal</td>
+                                <td>Datação, rastreios, prevenção</td>
+                                <td>USG 1º trim, sorologias, hemograma</td>
+                            </tr>
+                            <tr>
+                                <td><strong>28-36 semanas</strong></td>
+                                <td>Quinzenal</td>
+                                <td>Acompanhamento crescimento, DMG</td>
+                                <td>USG morfológico, TOTG, vacinas</td>
+                            </tr>
+                            <tr>
+                                <td><strong>36+ semanas</strong></td>
+                                <td>Semanal</td>
+                                <td>Preparação parto, vigilância final</td>
+                                <td>Strepto B, cardiotocografia</td>
+                            </tr>
+                        </table>
+
+                        <h4>Checklist por Consulta</h4>
+                        <div class="alert-box alert-success">
+                            <h4><i class="fas fa-check-circle"></i> Itens obrigatórios em cada consulta:</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+                                <div><i class="fas fa-heartbeat"></i> <strong>Aferir PA</strong> - técnica correta</div>
+                                <div><i class="fas fa-weight"></i> <strong>Pesar</strong> - acompanhar ganho ponderal</div>
+                                <div><i class="fas fa-ruler-vertical"></i> <strong>Altura uterina</strong> - crescimento fetal</div>
+                                <div><i class="fas fa-heart"></i> <strong>BCF</strong> - ausculta dos batimentos</div>
+                                <div><i class="fas fa-comment-medical"></i> <strong>Sintomas</strong> - questionar sinais de alarme</div>
+                                <div><i class="fas fa-pills"></i> <strong>Medicações</strong> - revisar adesão</div>
+                            </div>
+                        </div>
+
+                        <h4>Exames Obrigatórios por Trimestre</h4>
+                        <table class="medical-table">
+                            <tr>
+                                <th>Exame</th>
+                                <th>Quando fazer</th>
+                                <th>Objetivo</th>
+                                <th>Valores de Referência</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Hemograma completo</strong></td>
+                                <td>1ª consulta + 28-32s</td>
+                                <td>Avaliar anemia, infecções</td>
+                                <td>Hb > 11 g/dL (1º trim), >10.5 g/dL (2º/3º trim)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sorologias (HIV, sífilis, hepatite B)</strong></td>
+                                <td>1ª consulta + 30-32s (repetir HIV/sífilis)</td>
+                                <td>Prevenir transmissão vertical</td>
+                                <td>Negativos</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Glicemia de jejum</strong></td>
+                                <td>1ª consulta + 24-28s (TOTG)</td>
+                                <td>Rastrear diabetes gestacional</td>
+                                <td>Jejum < 92 mg/dL (OMS)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Urina tipo I + urocultura</strong></td>
+                                <td>1ª consulta + 28-32s</td>
+                                <td>Detectar bacteriúria assintomática</td>
+                                <td>Sem bacteriúria significativa</td>
+                            </tr>
+                            <tr>
+                                <td><strong>USG obstétrico</strong></td>
+                                <td>1º trim (datação), 2º trim (morfológico), 3º trim (crescimento)</td>
+                                <td>Avaliar desenvolvimento fetal</td>
+                                <td>Crescimento adequado à idade gestacional</td>
+                            </tr>
+                        </table>
+                    `
+                }
+            },
+            'primeira-consulta': {
+                'anamnese': {
+                    title: 'Anamnese Obstétrica Completa',
+                    category: 'Primeira Consulta',
+                    content: `
+                        <div class="alert-box alert-info">
+                            <h4><i class="fas fa-clipboard-check"></i> Itens Essenciais da Anamnese</h4>
                             <ul>
-                                <li><strong>Dados obstétricos:</strong> G, P, A, número de consultas pré-natais anteriores</li>
-                                <li><strong>História menstrual:</strong> DUM, ciclos, características</li>
+                                <li><strong>Dados obstétricos:</strong> G, P, A, partos anteriores (tipo, complicações)</li>
+                                <li><strong>História menstrual:</strong> DUM, regularidade, características</li>
                                 <li><strong>História médica:</strong> Doenças prévias, cirurgias, alergias</li>
                                 <li><strong>Medicações:</strong> Uso atual e prévio, incluindo fitoterápicos</li>
                                 <li><strong>História familiar:</strong> Diabetes, HAS, doenças genéticas</li>
-                                <li><strong>Hábitos:</strong> Tabagismo, álcool, drogas, alimentação</li>
+                                <li><strong>Hábitos:</strong> Tabagismo, álcool, drogas, alimentação, atividade física</li>
+                                <li><strong>Aspectos psicossociais:</strong> Suporte familiar, violência, condições de moradia</li>
                             </ul>
                         </div>
                         
@@ -1100,165 +1316,239 @@
                                 <td>Número de filhos vivos atualmente</td>
                             </tr>
                         </table>
-                    </div>
-                `,
-                'exame-fisico': `
-                    <div class="content-card">
-                        <h3><i class="fas fa-stethoscope"></i> Exame Físico na Primeira Consulta</h3>
-                        
-                        <h4>Avaliação Sistêmica</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0;">
-                            <div class="protocol-box">
-                                <div class="protocol-title"><i class="fas fa-heartbeat"></i> Sinais Vitais</div>
-                                <ul>
-                                    <li><strong>PA:</strong> Ambas os braços, posição sentada</li>
-                                    <li><strong>FC/FR:</strong> Frequência cardíaca e respiratória</li>
-                                    <li><strong>Temperatura:</strong> Avaliar febre</li>
-                                    <li><strong>Peso/IMC:</strong> Classificação nutricional</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="protocol-box">
-                                <div class="protocol-title"><i class="fas fa-search"></i> Exame Físico Geral</div>
-                                <ul>
-                                    <li><strong>Pele/mucosas:</strong> Cor, hidratação, edema</li>
-                                    <li><strong>Tireoide:</strong> Palpação cuidadosa</li>
-                                    <li><strong>Cardiopulmonar:</strong> Ausculta cardíaca e pulmonar</li>
-                                    <li><strong>Abdome:</strong> Inspeção, palpação, ausculta</li>
-                                </ul>
+
+                        <h4>Questionário de Riscos Obstétricos</h4>
+                        <div class="protocol-box">
+                            <div class="protocol-title"><i class="fas fa-exclamation-triangle"></i> Fatores de Risco a Investigar</div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                                <div>
+                                    <h5>Médicos</h5>
+                                    <ul>
+                                        <li>HAS prévia ou gestacional</li>
+                                        <li>Diabetes mellitus</li>
+                                        <li>Doenças tireoidianas</li>
+                                        <li>Doenças autoimunes</li>
+                                        <li>Trombofilias</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5>Obstétricos</h5>
+                                    <ul>
+                                        <li>Parto pré-termo anterior</li>
+                                        <li>Pré-eclâmpsia anterior</li>
+                                        <li>Restrição crescimento fetal</li>
+                                        <li>Malformações fetais</li>
+                                        <li>Óbito fetal anterior</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5>Sociais</h5>
+                                    <ul>
+                                        <li>Idade < 18 ou > 35 anos</li>
+                                        <li>Baixa renda/instrução</li>
+                                        <li>Violência doméstica</li>
+                                        <li>Uso de substâncias</li>
+                                        <li>Ausência de suporte</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                        
-                        <h4>Avaliação Obstétrica Inicial</h4>
+
+                        <h4>História Ginecológica Importante</h4>
                         <table class="medical-table">
                             <tr>
-                                <th>Exame</th>
-                                <th>Técnica</th>
-                                <th>Valores Normais</th>
+                                <th>Item</th>
+                                <th>O que perguntar</th>
                                 <th>Significado</th>
                             </tr>
                             <tr>
-                                <td><strong>Altura Uterina</strong></td>
-                                <td>Fita métrica sínfise-fundo</td>
-                                <td>Em cm ≈ semanas até 36s</td>
-                                <td>Crescimento fetal, polihidrâmnio, RCF</td>
+                                <td><strong>Ciclo menstrual</strong></td>
+                                <td>Regularidade, duração, fluxo, dismenorreia</td>
+                                <td>Avaliar função ovulatória, datação</td>
                             </tr>
                             <tr>
-                                <td><strong>Batimentos Cardíacos Fetais</strong></td>
-                                <td>Doppler a partir de 10-12s</td>
-                                <td>120-160 bpm</td>
-                                <td>Vitalidade fetal</td>
+                                <td><strong>Método contraceptivo</strong></td>
+                                <td>Tipo, duração de uso, quando parou</td>
+                                <td>Risco de gravidez ectópica se DIU</td>
                             </tr>
                             <tr>
-                                <td><strong>Toque Vaginal</strong></td>
-                                <td>Quando indicado</td>
-                                <td>Colo longo, fechado</td>
-                                <td>Avaliar incompetência cervical</td>
+                                <td><strong>DSTs prévias</strong></td>
+                                <td>Quais, quando, tratamento</td>
+                                <td>Risco de infertilidade, aderências</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cirurgias pélvicas</strong></td>
+                                <td>Tipo, motivo, complicações</td>
+                                <td>Risco de aderências, infertilidade</td>
                             </tr>
                         </table>
-                    </div>
-                `
-            },
+                    `
+                }
+            }
             // Outros módulos continuariam aqui...
         };
 
-        // Sistema de navegação
         document.addEventListener('DOMContentLoaded', function() {
-            // Navegação por módulos
-            const moduleHeaders = document.querySelectorAll('.module-header');
-            const subtopics = document.querySelectorAll('.subtopic');
+            // ========== CONFIGURAÇÃO INICIAL ==========
             
             // Inicializar primeiro módulo aberto
-            document.querySelector('.nav-module.active .module-subtopics').style.display = 'block';
-            document.querySelector('.nav-module.active .module-header i').className = 'fas fa-chevron-down';
+            document.querySelector('.module-title').classList.add('active');
+            document.querySelector('.module-content').classList.add('active');
             
-            // Abrir/fechar módulos
-            moduleHeaders.forEach(header => {
-                header.addEventListener('click', function() {
-                    const module = this.parentElement;
+            // ========== NAVEGAÇÃO DOS MÓDULOS ==========
+            const moduleTitles = document.querySelectorAll('.module-title');
+            const subtopics = document.querySelectorAll('.subtopic');
+            
+            moduleTitles.forEach(title => {
+                title.addEventListener('click', function() {
+                    const moduleId = this.dataset.module;
+                    const contentDiv = document.getElementById(`${moduleId}-content`);
                     const icon = this.querySelector('i');
-                    const subtopicsDiv = module.querySelector('.module-subtopics');
                     
-                    // Fechar todos os outros módulos
-                    document.querySelectorAll('.nav-module').forEach(m => {
-                        if (m !== module) {
-                            m.classList.remove('active');
-                            m.querySelector('.module-subtopics').style.display = 'none';
-                            m.querySelector('.module-header i').className = 'fas fa-chevron-right';
-                        }
+                    // Alternar estado
+                    const isActive = this.classList.contains('active');
+                    
+                    // Fechar todos os outros
+                    moduleTitles.forEach(t => {
+                        t.classList.remove('active');
+                        const otherIcon = t.querySelector('i');
+                        otherIcon.className = 'fas fa-chevron-right';
+                        const otherContent = document.getElementById(`${t.dataset.module}-content`);
+                        if (otherContent) otherContent.classList.remove('active');
                     });
                     
-                    // Alternar este módulo
-                    module.classList.toggle('active');
-                    if (module.classList.contains('active')) {
-                        subtopicsDiv.style.display = 'block';
+                    // Abrir este se estava fechado
+                    if (!isActive) {
+                        this.classList.add('active');
                         icon.className = 'fas fa-chevron-down';
-                    } else {
-                        subtopicsDiv.style.display = 'none';
-                        icon.className = 'fas fa-chevron-right';
+                        if (contentDiv) contentDiv.classList.add('active');
                     }
                 });
             });
             
-            // Navegação por subtópicos
+            // ========== CARREGAR CONTEÚDO ==========
             subtopics.forEach(subtopic => {
-                subtopic.addEventListener('click', function() {
+                subtopic.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
                     // Remover ativo de todos
                     subtopics.forEach(s => s.classList.remove('active'));
                     // Marcar este como ativo
                     this.classList.add('active');
                     
-                    const moduleId = this.closest('.nav-module').dataset.module;
-                    const sectionId = this.dataset.section;
+                    const href = this.getAttribute('href');
+                    const sectionId = href.substring(1); // Remove o #
+                    const [module, subsection] = sectionId.split('-');
                     
-                    // Carregar conteúdo
-                    loadContent(moduleId, sectionId);
+                    loadContent(module, subsection);
                 });
             });
             
-            // Calculadora IG/DPP
-            const cicloSelect = document.getElementById('ciclo');
-            const customCicloDiv = document.getElementById('custom-ciclo');
-            const calcularBtn = document.getElementById('calcular-btn');
-            const resultadoDiv = document.getElementById('resultado-calc');
-            
-            cicloSelect.addEventListener('change', function() {
-                if (this.value === 'custom') {
-                    customCicloDiv.style.display = 'block';
-                } else {
-                    customCicloDiv.style.display = 'none';
-                }
-            });
-            
-            calcularBtn.addEventListener('click', function() {
-                calcularIGeDPP();
-            });
-            
-            function calcularIGeDPP() {
-                const dum = new Date(document.getElementById('dum').value);
-                let ciclo;
+            function loadContent(module, subsection) {
+                const mainContent = document.getElementById('mainContent');
+                const welcomeSection = document.getElementById('welcome-section');
                 
-                if (cicloSelect.value === 'custom') {
-                    ciclo = parseInt(document.getElementById('ciclo-custom').value);
+                // Esconder seção de boas-vindas
+                if (welcomeSection) welcomeSection.style.display = 'none';
+                
+                // Procurar conteúdo
+                let content = null;
+                let title = '';
+                let category = '';
+                
+                if (medicalContent[module] && medicalContent[module][subsection]) {
+                    content = medicalContent[module][subsection].content;
+                    title = medicalContent[module][subsection].title;
+                    category = medicalContent[module][subsection].category;
                 } else {
-                    ciclo = parseInt(cicloSelect.value);
+                    // Conteúdo padrão se não encontrado
+                    content = `
+                        <div class="alert-box alert-info">
+                            <h4><i class="fas fa-tools"></i> Conteúdo em Desenvolvimento</h4>
+                            <p>Esta seção está sendo elaborada com conteúdo detalhado e será disponibilizada em breve.</p>
+                        </div>
+                    `;
+                    title = `${module} - ${subsection}`;
+                    category = 'Em desenvolvimento';
                 }
                 
+                // Criar HTML da seção
+                const sectionHTML = `
+                    <div class="content-section">
+                        <div class="section-header">
+                            <span class="section-category">${category}</span>
+                            <h1>${title}</h1>
+                        </div>
+                        ${content}
+                    </div>
+                `;
+                
+                // Atualizar conteúdo dinâmico
+                const dynamicContent = document.getElementById('dynamic-content');
+                dynamicContent.innerHTML = sectionHTML;
+                
+                // Adicionar event listeners para elementos dinâmicos
+                if (module === 'fundamentos' && subsection === 'calculadora') {
+                    setupCalculator();
+                }
+                
+                // Rolar para o topo
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            // ========== CALCULADORA IG/DPP ==========
+            function setupCalculator() {
+                const cicloSelect = document.getElementById('ciclo');
+                const customCicloDiv = document.getElementById('custom-ciclo');
+                const calcularBtn = document.getElementById('calcular-btn');
+                
+                if (cicloSelect) {
+                    cicloSelect.addEventListener('change', function() {
+                        if (this.value === 'custom') {
+                            customCicloDiv.style.display = 'block';
+                        } else {
+                            customCicloDiv.style.display = 'none';
+                        }
+                    });
+                }
+                
+                if (calcularBtn) {
+                    calcularBtn.addEventListener('click', calcularIGDPP);
+                }
+            }
+            
+            function calcularIGDPP() {
+                const dumInput = document.getElementById('dum');
+                const cicloSelect = document.getElementById('ciclo');
+                const cicloCustom = document.getElementById('ciclo-custom');
+                const resultadoDiv = document.getElementById('resultado-calc');
+                const resultadoTexto = document.getElementById('resultado-texto');
+                
+                if (!dumInput || !resultadoDiv || !resultadoTexto) return;
+                
+                const dum = new Date(dumInput.value);
                 if (isNaN(dum.getTime())) {
                     alert('Por favor, selecione uma data válida para a DUM.');
                     return;
                 }
                 
-                // Calcular DPP pela regra de Naegele
+                let ciclo = 28;
+                if (cicloSelect.value === 'custom' && cicloCustom) {
+                    ciclo = parseInt(cicloCustom.value) || 28;
+                } else {
+                    ciclo = parseInt(cicloSelect.value) || 28;
+                }
+                
+                // Calcular DPP (Regra de Naegele)
                 const dpp = new Date(dum);
                 dpp.setDate(dpp.getDate() + 7);
                 dpp.setMonth(dpp.getMonth() - 3);
                 dpp.setFullYear(dpp.getFullYear() + 1);
                 
-                // Ajustar para ciclo diferente de 28 dias
+                // Ajuste para ciclo diferente de 28 dias
                 if (ciclo !== 28) {
-                    const diffDias = ciclo - 28;
-                    dpp.setDate(dpp.getDate() + diffDias);
+                    const diff = ciclo - 28;
+                    dpp.setDate(dpp.getDate() + diff);
                 }
                 
                 // Calcular idade gestacional
@@ -1268,7 +1558,7 @@
                 const semanas = Math.floor(diffDias / 7);
                 const dias = diffDias % 7;
                 
-                // Classificar idade gestacional
+                // Classificação
                 let classificacao = '';
                 let corClassificacao = '';
                 
@@ -1293,8 +1583,7 @@
                     });
                 };
                 
-                // Exibir resultados
-                document.getElementById('resultado-texto').innerHTML = `
+                resultadoTexto.innerHTML = `
                     <div style="margin-bottom: 15px;">
                         <strong>Data da Última Menstruação:</strong> ${formatarData(dum)}
                     </div>
@@ -1318,196 +1607,221 @@
                 resultadoDiv.classList.add('show');
             }
             
-            // Sistema de progresso
-            const progressCheckboxes = document.querySelectorAll('.progress-item input');
-            const progressPercent = document.getElementById('progress-percent');
+            // ========== CALCULADORA DO PAINEL DIREITO ==========
+            document.getElementById('calcDPPBtn')?.addEventListener('click', function() {
+                const dumInput = document.getElementById('dumInput');
+                const cycleSelect = document.getElementById('cycleLength');
+                const resultDiv = document.getElementById('dppResult');
+                
+                if (!dumInput.value) {
+                    alert('Por favor, selecione a data da última menstruação.');
+                    return;
+                }
+                
+                const dum = new Date(dumInput.value);
+                const ciclo = parseInt(cycleSelect.value) || 28;
+                
+                // Cálculo
+                const dpp = new Date(dum);
+                dpp.setDate(dpp.getDate() + 7);
+                dpp.setMonth(dpp.getMonth() - 3);
+                dpp.setFullYear(dpp.getFullYear() + 1);
+                
+                if (ciclo !== 28) {
+                    const diff = ciclo - 28;
+                    dpp.setDate(dpp.getDate() + diff);
+                }
+                
+                const hoje = new Date();
+                const diffDias = Math.floor((hoje - dum) / (1000 * 60 * 60 * 24));
+                const semanas = Math.floor(diffDias / 7);
+                const dias = diffDias % 7;
+                
+                resultDiv.innerHTML = `
+                    <strong>DPP:</strong> ${dpp.toLocaleDateString('pt-BR')}<br>
+                    <strong>IG:</strong> ${semanas} semanas e ${dias} dias
+                `;
+                resultDiv.classList.add('show');
+            });
             
-            function updateProgress() {
+            // ========== SISTEMA DE PROGRESSO ==========
+            const modules = [
+                'Fundamentos e Datas',
+                'Primeira Consulta',
+                'Suplementação e Vacinas',
+                'Rastreamentos por Trimestre',
+                'Doenças Hipertensivas',
+                'Diabetes Gestacional',
+                'Infecções na Gestação',
+                'Isoimunização Rh',
+                'Trabalho de Parto',
+                'Emergências Obstétricas',
+                'Puerpério',
+                'Farmácia Obstétrica'
+            ];
+            
+            function initializeProgress() {
+                const container = document.getElementById('progress-container');
+                if (!container) return;
+                
+                container.innerHTML = '';
+                
+                modules.forEach((module, index) => {
+                    const progressId = `progress-${index}`;
+                    const isCompleted = localStorage.getItem(progressId) === 'true';
+                    
+                    const item = document.createElement('div');
+                    item.className = `progress-item ${isCompleted ? 'completed' : ''}`;
+                    item.innerHTML = `
+                        <input type="checkbox" id="${progressId}" ${isCompleted ? 'checked' : ''}>
+                        <label for="${progressId}">${module}</label>
+                    `;
+                    
+                    container.appendChild(item);
+                    
+                    const checkbox = item.querySelector('input');
+                    checkbox.addEventListener('change', function() {
+                        localStorage.setItem(progressId, this.checked);
+                        item.classList.toggle('completed', this.checked);
+                        updateProgressSummary();
+                    });
+                });
+                
+                updateProgressSummary();
+            }
+            
+            function updateProgressSummary() {
+                const summary = document.getElementById('progress-summary');
+                if (!summary) return;
+                
                 let completed = 0;
-                progressCheckboxes.forEach(checkbox => {
-                    if (checkbox.checked) {
+                modules.forEach((_, index) => {
+                    if (localStorage.getItem(`progress-${index}`) === 'true') {
                         completed++;
-                        checkbox.closest('.progress-item').classList.add('completed');
-                    } else {
-                        checkbox.closest('.progress-item').classList.remove('completed');
                     }
                 });
                 
-                const percent = Math.round((completed / progressCheckboxes.length) * 100);
-                progressPercent.textContent = percent + '%';
-                
-                // Salvar no localStorage
-                localStorage.setItem('obstetrics-progress', JSON.stringify({
-                    completed: completed,
-                    total: progressCheckboxes.length,
-                    timestamp: new Date().toISOString()
-                }));
+                const percent = Math.round((completed / modules.length) * 100);
+                summary.textContent = `Progresso: ${percent}%`;
             }
             
-            progressCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', updateProgress);
-                
-                // Carregar estado salvo
-                const savedProgress = localStorage.getItem('obstetrics-progress');
-                if (savedProgress) {
-                    const progress = JSON.parse(savedProgress);
-                    // Aqui você pode carregar estados específicos se quiser
-                }
-            });
-            
-            // Sistema de anotações
-            const notesArea = document.getElementById('notes-area');
-            const saveNotesBtn = document.getElementById('save-notes-btn');
-            const clearNotesBtn = document.getElementById('clear-notes-btn');
+            // ========== SISTEMA DE ANOTAÇÕES ==========
+            const notesTextarea = document.getElementById('notesTextarea');
+            const saveNotesBtn = document.getElementById('saveNotesBtn');
+            const clearNotesBtn = document.getElementById('clearNotesBtn');
             
             // Carregar anotações salvas
-            const savedNotes = localStorage.getItem('obstetrics-notes');
-            if (savedNotes) {
-                notesArea.value = savedNotes;
-            }
-            
-            saveNotesBtn.addEventListener('click', function() {
-                localStorage.setItem('obstetrics-notes', notesArea.value);
-                this.innerHTML = '<i class="fas fa-check"></i> Salvo!';
-                this.style.background = '#27ae60';
-                
-                setTimeout(() => {
-                    this.innerHTML = '<i class="fas fa-save"></i> Salvar';
-                    this.style.background = '';
-                }, 1500);
-            });
-            
-            clearNotesBtn.addEventListener('click', function() {
-                if (confirm('Tem certeza que deseja limpar todas as anotações?')) {
-                    notesArea.value = '';
-                    localStorage.removeItem('obstetrics-notes');
+            if (notesTextarea) {
+                const savedNotes = localStorage.getItem('obstetrics-notes');
+                if (savedNotes) {
+                    notesTextarea.value = savedNotes;
                 }
-            });
-            
-            // Auto-salvar enquanto digita
-            let typingTimer;
-            notesArea.addEventListener('input', function() {
-                clearTimeout(typingTimer);
-                typingTimer = setTimeout(() => {
-                    localStorage.setItem('obstetrics-notes', notesArea.value);
-                }, 2000);
-            });
-            
-            // Função para carregar conteúdo
-            function loadContent(moduleId, sectionId) {
-                const dynamicContent = document.getElementById('dynamic-content');
-                const existingCards = document.querySelectorAll('.content-card[id$="-content"]');
                 
-                // Esconder conteúdo existente
-                existingCards.forEach(card => {
-                    card.style.display = 'none';
+                // Auto-salvar
+                let typingTimer;
+                notesTextarea.addEventListener('input', function() {
+                    clearTimeout(typingTimer);
+                    typingTimer = setTimeout(() => {
+                        localStorage.setItem('obstetrics-notes', this.value);
+                    }, 2000);
                 });
-                
-                // Mostrar conteúdo dinâmico ou específico
-                if (moduleId === 'fundamentos') {
-                    // Conteúdo já existe na página inicial
-                    const targetCard = document.getElementById(sectionId + '-content');
-                    if (targetCard) {
-                        targetCard.style.display = 'block';
-                    }
-                    dynamicContent.innerHTML = '';
-                } else {
-                    // Carregar conteúdo dinâmico
-                    if (medicalContent[moduleId] && medicalContent[moduleId][sectionId]) {
-                        dynamicContent.innerHTML = medicalContent[moduleId][sectionId];
-                    } else {
-                        dynamicContent.innerHTML = `
-                            <div class="content-card">
-                                <h3><i class="fas fa-tools"></i> Conteúdo em Desenvolvimento</h3>
-                                <p>Esta seção está sendo elaborada com conteúdo detalhado.</p>
-                                <div class="alert-box alert-info">
-                                    <p><strong>Próximas atualizações incluirão:</strong></p>
-                                    <ul>
-                                        <li>Tabelas completas de medicamentos</li>
-                                        <li>Protocolos de conduta detalhados</li>
-                                        <li>Fluxogramas de decisão clínica</li>
-                                        <li>Casos clínicos interativos</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        `;
-                    }
-                    
-                    // Esconder todos os cards de fundamentos
-                    existingCards.forEach(card => {
-                        card.style.display = 'none';
-                    });
-                }
-                
-                // Atualizar título da página
-                const moduleName = document.querySelector(`[data-module="${moduleId}"] .module-header span`).textContent;
-                const subtopicName = document.querySelector(`[data-section="${sectionId}"]`).textContent;
-                
-                document.querySelector('.content-title').textContent = `${moduleName}: ${subtopicName}`;
-                document.querySelector('.content-category').textContent = moduleName.split('. ')[1];
             }
             
-            // Sistema de busca
+            if (saveNotesBtn) {
+                saveNotesBtn.addEventListener('click', function() {
+                    if (notesTextarea) {
+                        localStorage.setItem('obstetrics-notes', notesTextarea.value);
+                        this.innerHTML = '<i class="fas fa-check"></i> Salvo!';
+                        this.style.background = '#27ae60';
+                        
+                        setTimeout(() => {
+                            this.innerHTML = '<i class="fas fa-save"></i> Salvar';
+                            this.style.background = '';
+                        }, 1500);
+                    }
+                });
+            }
+            
+            if (clearNotesBtn) {
+                clearNotesBtn.addEventListener('click', function() {
+                    if (confirm('Tem certeza que deseja limpar todas as anotações?')) {
+                        if (notesTextarea) notesTextarea.value = '';
+                        localStorage.removeItem('obstetrics-notes');
+                    }
+                });
+            }
+            
+            // ========== TEMA ESCURO ==========
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                const isDarkMode = localStorage.getItem('dark-mode') === 'true';
+                if (isDarkMode) {
+                    document.body.classList.add('dark-mode');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+                
+                themeToggle.addEventListener('click', function() {
+                    document.body.classList.toggle('dark-mode');
+                    const isNowDark = document.body.classList.contains('dark-mode');
+                    localStorage.setItem('dark-mode', isNowDark);
+                    this.innerHTML = isNowDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                });
+            }
+            
+            // ========== SISTEMA DE BUSCA ==========
             const searchInput = document.getElementById('searchInput');
             const searchBtn = document.getElementById('searchBtn');
             
-            searchBtn.addEventListener('click', performSearch);
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    performSearch();
-                }
-            });
-            
             function performSearch() {
-                const term = searchInput.value.toLowerCase().trim();
+                const term = searchInput?.value.trim().toLowerCase();
                 if (!term) return;
                 
-                // Simulação de busca - em produção, seria mais complexo
-                const resultados = [
-                    {module: 'fundamentos', section: 'calculadora', title: 'Calculadora IG/DPP'},
-                    {module: 'fundamentos', section: 'sinais-alarme', title: 'Sinais de Alarme'},
-                    {module: 'primeira-consulta', section: 'anamnese', title: 'Anamnese Obstétrica'}
+                // Implementação simples de busca
+                const searchableContent = [
+                    { module: 'fundamentos', subsection: 'calculadora', title: 'Calculadora IG/DPP' },
+                    { module: 'fundamentos', subsection: 'sinais', title: 'Sinais de Alarme' },
+                    { module: 'fundamentos', subsection: 'rotina', title: 'Rotina Pré-Natal' },
+                    { module: 'primeira-consulta', subsection: 'anamnese', title: 'Anamnese Completa' }
                 ];
                 
-                const filtered = resultados.filter(r => 
-                    r.title.toLowerCase().includes(term) || 
-                    r.module.includes(term)
+                const results = searchableContent.filter(item => 
+                    item.title.toLowerCase().includes(term) || 
+                    item.module.includes(term)
                 );
                 
-                if (filtered.length > 0) {
-                    // Navegar para o primeiro resultado
-                    const resultado = filtered[0];
+                if (results.length > 0) {
+                    const firstResult = results[0];
+                    loadContent(firstResult.module, firstResult.subsection);
                     
-                    // Abrir módulo correspondente
-                    document.querySelectorAll('.nav-module').forEach(m => m.classList.remove('active'));
-                    const targetModule = document.querySelector(`[data-module="${resultado.module}"]`);
-                    if (targetModule) {
-                        targetModule.classList.add('active');
-                        targetModule.querySelector('.module-subtopics').style.display = 'block';
-                        targetModule.querySelector('.module-header i').className = 'fas fa-chevron-down';
-                        
-                        // Ativar subtópico
-                        document.querySelectorAll('.subtopic').forEach(s => s.classList.remove('active'));
-                        const targetSubtopic = targetModule.querySelector(`[data-section="${resultado.section}"]`);
-                        if (targetSubtopic) {
-                            targetSubtopic.classList.add('active');
-                            loadContent(resultado.module, resultado.section);
-                        }
-                    }
+                    // Atualizar navegação
+                    subtopics.forEach(s => s.classList.remove('active'));
+                    const targetLink = document.querySelector(`[href="#${firstResult.module}-${firstResult.subsection}"]`);
+                    if (targetLink) targetLink.classList.add('active');
                     
-                    searchInput.value = '';
+                    if (searchInput) searchInput.value = '';
                 } else {
                     alert('Nenhum resultado encontrado para: ' + term);
                 }
             }
             
-            // Ferramentas rápidas
-            document.getElementById('calc-imc').addEventListener('click', function() {
+            if (searchBtn) searchBtn.addEventListener('click', performSearch);
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') performSearch();
+                });
+            }
+            
+            // ========== BOTÕES DE FERRAMENTAS ==========
+            document.getElementById('quickCalcBtn')?.addEventListener('click', function() {
+                loadContent('fundamentos', 'calculadora');
+            });
+            
+            document.getElementById('imcCalcBtn')?.addEventListener('click', function() {
                 const peso = prompt('Digite o peso (kg):');
                 const altura = prompt('Digite a altura (m):');
                 
                 if (peso && altura) {
-                    const imc = (parseFloat(peso) / (parseFloat(altura) * parseFloat(altura))).toFixed(1);
+                    const imc = (parseFloat(peso) / (parseFloat(altura) ** 2)).toFixed(1);
                     let classificacao = '';
                     
                     if (imc < 18.5) classificacao = 'Baixo peso';
@@ -1519,11 +1833,47 @@
                 }
             });
             
-            // Inicializar progresso
-            updateProgress();
+            document.getElementById('quizBtn')?.addEventListener('click', function() {
+                const questions = [
+                    {
+                        question: 'Qual é o método mais preciso para datação gestacional?',
+                        options: [
+                            'USG do 1º trimestre (CRL)',
+                            'Data da última menstruação (DUM)',
+                            'Altura uterina',
+                            'Data da concepção estimada'
+                        ],
+                        correct: 0,
+                        explanation: 'O ultrassom do primeiro trimestre (medida do CRL) é o método mais preciso, com margem de erro de apenas 3-5 dias.'
+                    }
+                ];
+                
+                const q = questions[0];
+                let resposta = prompt(`${q.question}\n\n1. ${q.options[0]}\n2. ${q.options[1]}\n3. ${q.options[2]}\n4. ${q.options[3]}\n\nDigite o número da resposta:`);
+                
+                if (resposta) {
+                    const num = parseInt(resposta) - 1;
+                    if (num === q.correct) {
+                        alert('✅ Resposta correta!\n\n' + q.explanation);
+                    } else {
+                        alert(`❌ Resposta incorreta. A resposta correta é: ${q.options[q.correct]}\n\n${q.explanation}`);
+                    }
+                }
+            });
             
-            // Calcular automaticamente ao carregar a página
-            setTimeout(calcularIGeDPP, 500);
+            // ========== INICIALIZAR SISTEMAS ==========
+            initializeProgress();
+            
+            // Carregar primeira seção por padrão
+            setTimeout(() => {
+                if (window.location.hash) {
+                    const hash = window.location.hash.substring(1);
+                    const [module, subsection] = hash.split('-');
+                    if (module && subsection) {
+                        loadContent(module, subsection);
+                    }
+                }
+            }, 100);
         });
     </script>
 </body>
