@@ -1,0 +1,1945 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obstetrícia - Livro Rápido | Guia Prático para Estudantes de Medicina</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #1abc9c;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --sidebar-width: 300px;
+            --utility-width: 320px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .main-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1a2530 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 500px;
+        }
+
+        .search-input {
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid transparent;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .search-input:focus {
+            background-color: rgba(255, 255, 255, 0.25);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.25rem rgba(26, 188, 156, 0.25);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+        }
+
+        /* Main layout */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: white;
+            border-right: 1px solid #eaeaea;
+            padding: 1.5rem 1rem;
+            overflow-y: auto;
+            transition: all 0.3s;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+            width: 0;
+            padding: 0;
+        }
+
+        .sidebar-toggle {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 100;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            width: 36px;
+            height: 36px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .nav-tree {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .nav-tree li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-tree a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: #555;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .nav-tree a:hover, .nav-tree a.active {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+            border-left: 3px solid var(--secondary-color);
+        }
+
+        .nav-tree .has-children > a {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .nav-tree .children {
+            list-style: none;
+            padding-left: 1.5rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .nav-tree .children.show {
+            display: block;
+        }
+
+        .nav-tree .toggle-children {
+            float: right;
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+        }
+
+        .nav-tree .toggle-children.rotated {
+            transform: rotate(90deg);
+        }
+
+        /* Content area */
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            max-width: 100%;
+        }
+
+        .section-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--secondary-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .badge-category {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Utility panel */
+        .utility-panel {
+            width: var(--utility-width);
+            background-color: white;
+            border-left: 1px solid #eaeaea;
+            padding: 1.5rem;
+            overflow-y: auto;
+            transition: all 0.3s;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.05);
+        }
+
+        .utility-panel.collapsed {
+            transform: translateX(100%);
+            width: 0;
+            padding: 0;
+        }
+
+        .utility-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 100;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            width: 36px;
+            height: 36px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .utility-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--warning-color);
+        }
+
+        /* Calculators */
+        .calculator {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .calculator h5 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .calc-result {
+            background-color: white;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-left: 4px solid var(--accent-color);
+            font-weight: 600;
+            color: var(--primary-color);
+            display: none;
+        }
+
+        /* Progress tracker */
+        .progress-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .progress-item:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        .progress-item input {
+            margin-right: 0.75rem;
+        }
+
+        .progress-item label {
+            flex: 1;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .progress-item.completed label {
+            color: #28a745;
+            text-decoration: line-through;
+        }
+
+        /* Notes */
+        .notes-container {
+            margin-top: 2rem;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            font-family: inherit;
+            margin-bottom: 1rem;
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        /* Content styles */
+        .info-box {
+            background-color: rgba(26, 188, 156, 0.1);
+            border-left: 4px solid var(--accent-color);
+            padding: 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid var(--warning-color);
+            padding: 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .danger-box {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid var(--danger-color);
+            padding: 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .content-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .content-table th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        .content-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .content-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: #e9ecef;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            margin: 0.25rem;
+        }
+
+        .pill.primary {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--secondary-color);
+        }
+
+        .pill.success {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+
+        .pill.warning {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning-color);
+        }
+
+        /* Footer */
+        .main-footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .utility-panel {
+                position: fixed;
+                right: 0;
+                top: 80px;
+                height: calc(100vh - 80px);
+                z-index: 999;
+            }
+
+            .utility-toggle {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 80px;
+                height: calc(100vh - 80px);
+                z-index: 999;
+            }
+
+            .sidebar-toggle {
+                display: flex;
+            }
+
+            .content-area {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 1rem 0.5rem;
+            }
+
+            .section-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .search-container {
+                max-width: 100%;
+                margin-top: 1rem;
+            }
+        }
+
+        /* Dark mode */
+        .dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .dark-mode .sidebar,
+        .dark-mode .utility-panel,
+        .dark-mode .section-card {
+            background-color: #2d2d2d;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+
+        .dark-mode .section-header {
+            border-bottom-color: #444;
+        }
+
+        .dark-mode .nav-tree a {
+            color: #ccc;
+        }
+
+        .dark-mode .content-table tr:nth-child(even) {
+            background-color: #363636;
+        }
+
+        .dark-mode .content-table td {
+            border-bottom-color: #444;
+        }
+
+        .dark-mode .calculator {
+            background-color: #363636;
+        }
+
+        .dark-mode .notes-textarea {
+            background-color: #363636;
+            color: #e0e0e0;
+            border-color: #555;
+        }
+
+        /* Quiz */
+        .quiz-container {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .quiz-question {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .quiz-option {
+            display: block;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background-color: white;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            background-color: #f0f7ff;
+            border-color: var(--secondary-color);
+        }
+
+        .quiz-option.correct {
+            background-color: rgba(40, 167, 69, 0.15);
+            border-color: #28a745;
+        }
+
+        .quiz-option.incorrect {
+            background-color: rgba(231, 76, 60, 0.15);
+            border-color: var(--danger-color);
+        }
+
+        .quiz-feedback {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        /* Toggle switches */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
+                <div class="d-flex align-items-center w-100">
+                    <button class="sidebar-toggle me-2" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <a class="logo me-auto" href="#">
+                        <i class="fas fa-book-medical me-2"></i>Obstetrícia<span>LivroRápido</span>
+                    </a>
+                    <div class="toggle-container">
+                        <span class="me-2 d-none d-md-inline">Modo Escuro</span>
+                        <label class="switch">
+                            <input type="checkbox" id="darkModeToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="search-container mt-2 mt-md-0">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Buscar por termo, medicamento, conduta...">
+                    <button class="search-btn" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <h3 class="sidebar-title">
+                <i class="fas fa-sitemap me-2"></i>Índice do Conteúdo
+            </h3>
+            
+            <ul class="nav-tree" id="navTree">
+                <!-- Navigation will be populated by JavaScript -->
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content-area" id="contentArea">
+            <!-- Content will be loaded here dynamically -->
+            <div class="text-center py-5" id="welcomeSection">
+                <h1 class="display-4 text-primary mb-4">Guia Prático de Obstetrícia</h1>
+                <p class="lead mb-4">Conteúdo completo, atualizado e prático para estudantes de medicina e profissionais da saúde</p>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="info-box">
+                            <h5><i class="fas fa-lightbulb me-2"></i>Como usar este guia</h5>
+                            <p>Use o índice à esquerda para navegar pelos tópicos. Utilize a barra de busca para encontrar termos específicos. No painel à direita, você encontrará calculadoras, rastreador de progresso e área para anotações.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-lg mt-4" id="startReadingBtn">
+                    <i class="fas fa-play me-2"></i>Começar a Leitura
+                </button>
+            </div>
+            
+            <!-- Content sections will be dynamically loaded here -->
+            <div id="dynamicContent"></div>
+        </main>
+
+        <!-- Utility Panel -->
+        <aside class="utility-panel" id="utilityPanel">
+            <button class="utility-toggle" id="utilityToggle">
+                <i class="fas fa-calculator"></i>
+            </button>
+            
+            <h3 class="utility-title">
+                <i class="fas fa-tools me-2"></i>Ferramentas
+            </h3>
+            
+            <!-- Calculators -->
+            <div class="calculator">
+                <h5><i class="fas fa-calculator me-2"></i>Calculadora de DPP</h5>
+                <div class="mb-3">
+                    <label for="dumInput" class="form-label">Data da Última Menstruação (DUM)</label>
+                    <input type="date" class="form-control" id="dumInput">
+                </div>
+                <div class="mb-3">
+                    <label for="cycleLength" class="form-label">Duração do ciclo (dias)</label>
+                    <input type="number" class="form-control" id="cycleLength" value="28" min="21" max="45">
+                </div>
+                <button class="btn btn-primary btn-sm w-100" id="calculateDPP">Calcular DPP e IG</button>
+                <div class="calc-result" id="dppResult"></div>
+            </div>
+            
+            <div class="calculator">
+                <h5><i class="fas fa-weight me-2"></i>Calculadora de IMC Pré-gestacional</h5>
+                <div class="mb-3">
+                    <label for="weightInput" class="form-label">Peso (kg)</label>
+                    <input type="number" class="form-control" id="weightInput" step="0.1">
+                </div>
+                <div class="mb-3">
+                    <label for="heightInput" class="form-label">Altura (m)</label>
+                    <input type="number" class="form-control" id="heightInput" step="0.01" min="0.5" max="2.5">
+                </div>
+                <button class="btn btn-primary btn-sm w-100" id="calculateBMI">Calcular IMC</button>
+                <div class="calc-result" id="bmiResult"></div>
+            </div>
+            
+            <!-- Progress Tracker -->
+            <h5 class="mt-4 mb-3"><i class="fas fa-tasks me-2"></i>Seu Progresso</h5>
+            <div id="progressTracker">
+                <!-- Progress items will be populated by JavaScript -->
+            </div>
+            
+            <!-- Notes Section -->
+            <div class="notes-container">
+                <h5><i class="fas fa-sticky-note me-2"></i>Suas Anotações</h5>
+                <textarea class="notes-textarea" id="notesTextarea" placeholder="Digite suas anotações aqui..."></textarea>
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-outline-primary btn-sm" id="saveNotes">
+                        <i class="fas fa-save me-1"></i>Salvar
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" id="clearNotes">
+                        <i class="fas fa-trash me-1"></i>Limpar
+                    </button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5>Obstetrícia — Livro Rápido</h5>
+                    <p>Guia prático para estudantes de medicina e profissionais da saúde. Conteúdo baseado em evidências e protocolos atualizados.</p>
+                    <div class="warning-box mt-3">
+                        <p><strong>⚠️ Aviso Importante:</strong> Este material é para fins educacionais. Condutas podem variar conforme protocolos locais (Ministério da Saúde, ACOG, OMS). Em situações de urgência, siga sempre o protocolo do seu serviço.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5>Recursos Úteis</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light"><i class="fas fa-external-link-alt me-2"></i>Diretrizes do Ministério da Saúde</a></li>
+                        <li><a href="#" class="text-light"><i class="fas fa-external-link-alt me-2"></i>Protocolos ACOG</a></li>
+                        <li><a href="#" class="text-light"><i class="fas fa-external-link-alt me-2"></i>Recomendações OMS</a></li>
+                        <li><a href="#" class="text-light"><i class="fas fa-download me-2"></i>Versão PDF deste guia</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="bg-light">
+            <div class="text-center pt-3">
+                <p>&copy; 2023 Obstetrícia Livro Rápido. Desenvolvido para fins educacionais.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // ==================== CONFIGURAÇÃO INICIAL ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // ==================== DADOS DO CONTEÚDO ====================
+            const contentData = [
+                {
+                    id: "fundamentos-datas",
+                    title: "1) Fundamentos e Datas",
+                    category: "Básico",
+                    content: `
+                        <h2 class="section-title">Fundamentos e Datas</h2>
+                        <p class="lead">O básico que destrava metade da obstetrícia: idade gestacional, DPP, sinais de gravidade e rotina.</p>
+                        
+                        <h4><i class="fas fa-calendar-alt me-2 text-primary"></i>Idade Gestacional (IG) e DPP</h4>
+                        <ul>
+                            <li><strong>Gestação a termo</strong>: ~37 a 41 semanas + 6 dias (conceito geral; pode variar conforme guia)</li>
+                            <li><strong>Datação ideal</strong>: USG do 1º trimestre (CCN/CRL) é a mais precisa.</li>
+                            <li><strong>Regra de Naegele (DPP)</strong>: DUM + 7 dias − 3 meses (+ 1 ano) (ajuste conforme calendário)</li>
+                            <li>Se DUM incerta: priorize USG precoce.</li>
+                        </ul>
+                        
+                        <div class="warning-box">
+                            <h5><i class="fas fa-exclamation-triangle me-2"></i>Armadilha de Prova</h5>
+                            <p>DUM "redondinha" nem sempre é confiável (ciclos irregulares, anticoncepção recente, sangramento de nidação confundindo).</p>
+                        </div>
+                        
+                        <h4 class="mt-4"><i class="fas fa-ambulance me-2 text-danger"></i>Sinais de Alarme (sempre perguntar)</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul>
+                                    <li>Sangramento vaginal importante</li>
+                                    <li>Dor abdominal intensa/contínua</li>
+                                    <li>Cefaleia forte + escotomas/fosfenos</li>
+                                    <li>Dispneia / dor torácica</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul>
+                                    <li>Edema abrupto + ganho rápido de peso</li>
+                                    <li>↓ movimentos fetais</li>
+                                    <li>Febre / disúria / dor lombar</li>
+                                    <li>Rotura de membranas (perda de líquido)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="danger-box">
+                            <p><strong>Qualquer um desses</strong> → reavaliar risco e encaminhar/avaliar urgência conforme quadro.</p>
+                        </div>
+                        
+                        <h4 class="mt-4"><i class="fas fa-clipboard-list me-2 text-success"></i>Consultas de Pré-Natal: "Ritmo" Típico</h4>
+                        <p>Em geral: consultas mais espaçadas no início e mais frequentes no final. O "como" exato depende do protocolo local, mas a lógica é: início = datar e rastrear, meio = acompanhar crescimento/risco, final = prevenir complicações e planejar o parto.</p>
+                        
+                        <div class="quiz-container mt-4">
+                            <h5><i class="fas fa-question-circle me-2"></i>Teste Seu Conhecimento</h5>
+                            <div class="quiz-question">Qual é o método mais preciso para datação gestacional?</div>
+                            <div class="quiz-option" data-correct="true">A) USG do 1º trimestre (CRL)</div>
+                            <div class="quiz-option" data-correct="false">B) Data da última menstruação (DUM)</div>
+                            <div class="quiz-option" data-correct="false">C) Altura uterina</div>
+                            <div class="quiz-option" data-correct="false">D) Data da concepção estimada</div>
+                            <div class="quiz-feedback" id="quiz1Feedback">
+                                <strong>Resposta Correta: A)</strong> O ultrassom do primeiro trimestre (medida do CRL - comprimento cabeça-nádega) é o método mais preciso para datação gestacional, com margem de erro de apenas 3-5 dias.
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary mt-2" id="checkQuiz1">Verificar Resposta</button>
+                        </div>
+                    `,
+                    subsections: [
+                        {id: "calculadora-ig", title: "Calculadora IG/DPP"},
+                        {id: "sinais-alarme", title: "Sinais de Alarme"},
+                        {id: "rotina-pre-natal", title: "Rotina Pré-Natal"}
+                    ]
+                },
+                {
+                    id: "primeira-consulta",
+                    title: "2) Primeira Consulta do Pré-Natal",
+                    category: "Pré-Natal",
+                    content: `
+                        <h2 class="section-title">Primeira Consulta do Pré-Natal</h2>
+                        <p class="lead">A consulta que define o jogo: classifica risco, fecha rastreios e organiza o plano do acompanhamento.</p>
+                        
+                        <h4><i class="fas fa-comment-medical me-2 text-primary"></i>Anamnese Obstétrica e Clínica</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul>
+                                    <li><strong>Gesta/para/aborto</strong>, partos anteriores (normal/cesárea), complicações (HPP, PE, prematuridade)</li>
+                                    <li><strong>Comorbidades</strong>: HAS, DM, renal, autoimunes, trombofilias, cardiopatias</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul>
+                                    <li><strong>Medicações em uso</strong> (teratogênicos!), alergias</li>
+                                    <li><strong>História familiar</strong> (malformações, DM, HAS)</li>
+                                    <li><strong>Aspectos sociais</strong>: suporte, violência, álcool/drogas, condições de moradia</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mt-4"><i class="fas fa-stethoscope me-2 text-primary"></i>Exame Físico Essencial</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span class="pill primary">PA (técnica correta)</span>
+                                <span class="pill primary">Peso/IMC</span>
+                                <span class="pill primary">Sinais de anemia</span>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="pill primary">Ausculta cardíaca</span>
+                                <span class="pill primary">Altura uterina</span>
+                                <span class="pill primary">Batimentos cardíacos fetais</span>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mt-4"><i class="fas fa-vial me-2 text-primary"></i>Exames Iniciais (Pacote "Clássico")</h4>
+                        <table class="content-table">
+                            <thead>
+                                <tr>
+                                    <th>Grupo</th>
+                                    <th>Exames</th>
+                                    <th>Por quê</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Sangue</strong></td>
+                                    <td>Hemograma, tipagem ABO/Rh, Coombs indireto (se Rh−), glicemia (triagem), sorologias</td>
+                                    <td>Anemia, risco isoimunização, rastrear DM/infecções</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Urina</strong></td>
+                                    <td>EAS + urocultura (especialmente no início)</td>
+                                    <td>Bacteriúria assintomática e ITU</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Infecções</strong></td>
+                                    <td>Sífilis, HIV, hepatite B (± C), rubéola/toxo conforme protocolo local</td>
+                                    <td>Prevenir transmissão vertical e complicações fetais</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Imagem</strong></td>
+                                    <td>USG 1º tri (datação/viabilidade) quando disponível</td>
+                                    <td>Melhor datação + rastreios iniciais</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="info-box">
+                            <h5><i class="fas fa-key me-2"></i>Chave de Ouro</h5>
+                            <p>Primeira consulta boa é a que sai com: <strong>IG fechada, risco classificado, exames solicitados e plano escrito</strong>.</p>
+                        </div>
+                    `,
+                    subsections: [
+                        {id: "anamnese-obstetrica", title: "Anamnese Obstétrica"},
+                        {id: "exame-fisico", title: "Exame Físico"},
+                        {id: "exames-iniciais", title: "Exames Iniciais"}
+                    ]
+                },
+                {
+                    id: "suplementacao-vacinas",
+                    title: "3) Suplementação e Vacinas",
+                    category: "Prevenção",
+                    content: `
+                        <h2 class="section-title">Suplementação e Vacinas</h2>
+                        <p class="lead">Aqui é onde você "compra" prevenção barata: anemia, defeito do tubo neural, infecções evitáveis.</p>
+                        
+                        <h4><i class="fas fa-pills me-2 text-primary"></i>Suplementos (Visão Prática)</h4>
+                        <table class="content-table">
+                            <thead>
+                                <tr>
+                                    <th>Suplemento</th>
+                                    <th>Indicação</th>
+                                    <th>Considerações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Ácido fólico</strong></td>
+                                    <td>Ideal iniciar antes da concepção e manter no 1º trimestre</td>
+                                    <td>Dose varia por risco (habitual: 400-800 µg/dia; alto risco: 4-5 mg/dia)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ferro</strong></td>
+                                    <td>Profilaxia/tratamento conforme Hb e ferritina</td>
+                                    <td>Tolerância GI é o "vilão" (sugerir tomando com alimento ou à noite)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cálcio</strong></td>
+                                    <td>Pode ser indicado em grupos de risco para pré-eclâmpsia</td>
+                                    <td>Conforme diretriz (geralmente 1-1,5 g/dia em populações com baixa ingestão)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Vitamina D</strong></td>
+                                    <td>Considerar conforme risco/deficiência</td>
+                                    <td>Especialmente se baixa exposição solar (dosagem de 25-OH-vitamina D)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Iodo</strong></td>
+                                    <td>Geralmente via sal iodado/alimentação</td>
+                                    <td>Atenção em distúrbios tireoidianos (hipertireoidismo, tireoidite de Hashimoto)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p><em>Doses exatas e quando usar (alto risco) dependem do protocolo do seu serviço.</em></p>
+                        
+                        <h4 class="mt-4"><i class="fas fa-syringe me-2 text-primary"></i>Vacinas (Lógica Geral)</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-box">
+                                    <h6><i class="fas fa-check-circle me-2 text-success"></i>Inativadas (geralmente podem)</h6>
+                                    <ul class="mb-0">
+                                        <li>Influenza (anual)</li>
+                                        <li>dT/dTpa (a partir da 20ª semana)</li>
+                                        <li>Hepatite B (conforme status)</li>
+                                        <li>COVID-19 (conforme recomendações vigentes)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="warning-box">
+                                    <h6><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Vivas atenuadas (em geral evitar na gestação)</h6>
+                                    <ul class="mb-0">
+                                        <li>Tríplice viral (sarampo, caxumba, rubéola)</li>
+                                        <li>Varicela</li>
+                                        <li>Febre amarela (avaliar risco-benefício)</li>
+                                        <li>BCG</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box mt-3">
+                            <p><strong>Pós-parto:</strong> ótima janela para atualizar o que ficou pendente.</p>
+                        </div>
+                        
+                        <div class="quiz-container mt-4">
+                            <h5><i class="fas fa-question-circle me-2"></i>Teste Seu Conhecimento</h5>
+                            <div class="quiz-question">Por que evitar vacina viva atenuada na gestação?</div>
+                            <div class="quiz-option" data-correct="true">A) Risco teórico de infecção fetal</div>
+                            <div class="quiz-option" data-correct="false">B) Porque não são eficazes em gestantes</div>
+                            <div class="quiz-option" data-correct="false">C) Porque causam aborto espontâneo em 100% dos casos</div>
+                            <div class="quiz-option" data-correct="false">D) Porque interagem com suplementos de ferro</div>
+                            <div class="quiz-feedback" id="quiz2Feedback">
+                                <strong>Resposta Correta: A)</strong> Vacinas vivas atenuadas têm risco teórico de causar infecção fetal (embora eventos sejam raros). Por precaução, recomenda-se evitar na gestação, exceto em situações especiais com avaliação rigorosa de risco-benefício.
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary mt-2" id="checkQuiz2">Verificar Resposta</button>
+                        </div>
+                    `,
+                    subsections: [
+                        {id: "suplementos", title: "Suplementos"},
+                        {id: "vacinas", title: "Vacinas"},
+                        {id: "esquema-vacinal", title: "Esquema Vacinal"}
+                    ]
+                },
+                {
+                    id: "doencas-hipertensivas",
+                    title: "5) Doenças Hipertensivas da Gestação (DHG)",
+                    category: "Intercorrências",
+                    content: `
+                        <h2 class="section-title">Doenças Hipertensivas da Gestação (DHG)</h2>
+                        <p class="lead">Tema campeão de prova e de plantão. O segredo é reconhecer gravidade e não "subestimar" sintoma neurológico.</p>
+                        
+                        <h4><i class="fas fa-heartbeat me-2 text-primary"></i>Conceitos (Bem Didático)</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-box mb-3">
+                                    <h6>HAS Gestacional</h6>
+                                    <p class="mb-0">Hipertensão (PA ≥ 140/90 mmHg) após 20 semanas sem critérios de pré-eclâmpsia.</p>
+                                </div>
+                                <div class="warning-box mb-3">
+                                    <h6>Pré-eclâmpsia</h6>
+                                    <p class="mb-0">HAS após 20 semanas + disfunção orgânica e/ou proteinúria (critérios variam por diretriz).</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="danger-box mb-3">
+                                    <h6>Eclâmpsia</h6>
+                                    <p class="mb-0">Convulsão em contexto de pré-eclâmpsia.</p>
+                                </div>
+                                <div class="danger-box">
+                                    <h6>Síndrome HELLP</h6>
+                                    <p class="mb-0">Hemólise, enzimas hepáticas elevadas, plaquetopenia.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mt-4"><i class="fas fa-exclamation-triangle me-2 text-danger"></i>"Red Flags" (Memorização)</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul>
+                                    <li><strong>Cefaleia intensa</strong> + escotomas/fosfenos</li>
+                                    <li><strong>Dor epigástrica</strong> / hipocôndrio direito</li>
+                                    <li><strong>Dispneia</strong> / edema pulmonar</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul>
+                                    <li><strong>Oligúria</strong> / creatinina subindo</li>
+                                    <li><strong>Plaquetas caindo</strong> / TGO-TGP subindo</li>
+                                    <li><strong>Edema facial</strong> e de mãos importante</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="danger-box">
+                            <h5><i class="fas fa-skull-crossbones me-2"></i>Regra de Sobrevivência</h5>
+                            <p><strong>Neurológico em gestante hipertensa = não é frescura. É gravidade até dizer o contrário.</strong></p>
+                        </div>
+                        
+                        <h4 class="mt-4"><i class="fas fa-prescription-bottle-alt me-2 text-primary"></i>Magnésio: Onde Entra?</h4>
+                        <p><strong>Sulfato de magnésio</strong> é a base para prevenção/tratamento de convulsões na pré-eclâmpsia grave/eclâmpsia. Esquemas variam (Pritchard/Zuspan). Em prova, o conceito é: controla convulsão e reduz risco de recorrência.</p>
+                        
+                        <div class="info-box">
+                            <h5><i class="fas fa-clipboard-check me-2"></i>Checklist de Avaliação em DHG</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="check1">
+                                <label class="form-check-label" for="check1">PA aferida corretamente (duas medidas com intervalo)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="check2">
+                                <label class="form-check-label" for="check2">Avaliação de sintomas neurológicos</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="check3">
+                                <label class="form-check-label" for="check3">Exame de urina (proteinúria)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="check4">
+                                <label class="form-check-label" for="check4">Solicitação de exames laboratoriais (hemograma, TGO/TGP, creatinina)</label>
+                            </div>
+                        </div>
+                    `,
+                    subsections: [
+                        {id: "conceitos-dhg", title: "Conceitos"},
+                        {id: "sinais-alarme-dhg", title: "Sinais de Alarme"},
+                        {id: "tratamento-dhg", title: "Tratamento"}
+                    ]
+                },
+                {
+                    id: "trabalho-parto",
+                    title: "9) Trabalho de Parto e Parto",
+                    category: "Parto",
+                    content: `
+                        <h2 class="section-title">Trabalho de Parto e Parto</h2>
+                        <p class="lead">Fisiologia + clínica + partograma + assistência segura. Aqui a obstetrícia vira "mecânica fina".</p>
+                        
+                        <h4><i class="fas fa-baby me-2 text-primary"></i>Trabalho de Parto — Pilares</h4>
+                        <div class="row">
+                            <div class="col-md-4 text-center mb-3">
+                                <div class="p-3 border rounded">
+                                    <i class="fas fa-utensils fa-2x text-primary mb-2"></i>
+                                    <h6>Contrações Regulares</h6>
+                                    <p class="small">Rítmicas, progressivas, com apagamento/dilatação cervical</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center mb-3">
+                                <div class="p-3 border rounded">
+                                    <i class="fas fa-search fa-2x text-primary mb-2"></i>
+                                    <h6>Avaliação Obstétrica</h6>
+                                    <p class="small">Apresentação, posição, altura, estação</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center mb-3">
+                                <div class="p-3 border rounded">
+                                    <i class="fas fa-heartbeat fa-2x text-primary mb-2"></i>
+                                    <h6>Monitoramento</h6>
+                                    <p class="small">Mãe (PA, dor, sangramento) e feto (BCF, padrões)</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mt-4"><i class="fas fa-procedures me-2 text-primary"></i>Analgesia e Conforto</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Não Farmacológica</h6>
+                                <ul>
+                                    <li>Acolhimento e suporte emocional</li>
+                                    <li>Deambulação quando possível</li>
+                                    <li>Posições confortáveis (bola, cavalinho)</li>
+                                    <li>Banho morno, massagem</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Farmacológica</h6>
+                                <ul>
+                                    <li>Analgesia neuraxial (peridural/raqui) - padrão ouro quando disponível</li>
+                                    <li>Opioides (fentanil, meperidina) - com monitoração</li>
+                                    <li>Óxido nitroso (Entonox®) - em alguns serviços</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="warning-box">
+                            <h5><i class="fas fa-comment-medical me-2"></i>Pérola de Prova</h5>
+                            <p>"Sofrimento fetal" não é "achismo": precisa de critérios e contexto (e ação). Padrões anormais de BCF exigem intervenção (mudar posição, O2, fluidoterapia, preparar para resolução).</p>
+                        </div>
+                        
+                        <h4 class="mt-4"><i class="fas fa-clipboard-list me-2 text-primary"></i>Partograma (Conceito)</h4>
+                        <p>Ferramenta gráfica para monitorar progresso do trabalho de parto. Inclui:</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul>
+                                    <li>Dilatação cervical ao longo do tempo</li>
+                                    <li>Estacao fetal (relacao da apresentacao com as espinhas isquiaticas)</li>
+                                    <li>Frequencia e intensidade das contracoes</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul>
+                                    <li>Batimentos cardiacos fetais</li>
+                                    <li>Caracteristicas do liquido amniotico</li>
+                                    <li>Medicacoes administradas</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box mt-4">
+                            <h5><i class="fas fa-lightbulb me-2"></i>Dica Prática</h5>
+                            <p>A "regra dos 5-1-1" para início do trabalho de parto ativo: contrações a cada 5 minutos, com duração de 1 minuto cada, por pelo menos 1 hora. Mas atenção: paridade e apresentação podem modificar este ritmo.</p>
+                        </div>
+                    `,
+                    subsections: [
+                        {id: "pilares-trabalho-parto", title: "Pilares do TP"},
+                        {id: "analgesia", title: "Analgesia"},
+                        {id: "partograma", title: "Partograma"}
+                    ]
+                }
+            ];
+
+            // ==================== CONTEÚDO ADICIONAL (EXPANSÃO) ====================
+            const additionalContent = [
+                {
+                    id: "monitoramento-fetal",
+                    title: "Monitoramento Fetal Avançado",
+                    category: "Diagnóstico",
+                    content: `
+                        <h2 class="section-title">Monitoramento Fetal Avançado</h2>
+                        <p class="lead">Técnicas para avaliação do bem-estar fetal, interpretação de cardiotocografia e condutas baseadas em padrões.</p>
+                        
+                        <h4><i class="fas fa-heartbeat me-2 text-primary"></i>Cardiotocografia (CTG) - Interpretação Básica</h4>
+                        <p>A CTG avalia a frequência cardíaca fetal (FCF) e a atividade uterina. Use a sigla <strong>DR C BRAVADO</strong> para interpretação sistemática:</p>
+                        
+                        <table class="content-table">
+                            <thead>
+                                <tr>
+                                    <th>Parâmetro</th>
+                                    <th>Normal</th>
+                                    <th>Indeterminado</th>
+                                    <th>Anormal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Frequência Cardíaca de Base</strong></td>
+                                    <td>110-160 bpm</td>
+                                    <td>100-110 ou 160-170 bpm</td>
+                                    <td>&lt;100 ou &gt;170 bpm</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Variabilidade</strong></td>
+                                    <td>6-25 bpm</td>
+                                    <td>5-6 bpm por 40-90 min ou &gt;25 bpm</td>
+                                    <td>&lt;5 bpm por &gt;90 min ou &gt;25 bpm por &gt;30 min</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Acelerações</strong></td>
+                                    <td>Presentes</td>
+                                    <td>Ausentes mas com variabilidade normal</td>
+                                    <td>Ausentes com variabilidade reduzida</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Desacelerações</strong></td>
+                                    <td>Ausentes ou precoces leves</td>
+                                    <td>Desacelerações variáveis não recorrentes ou precoces recorrentes</td>
+                                    <td>Desacelerações variáveis recorrentes ou tardias</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4 class="mt-4"><i class="fas fa-wave-square me-2 text-primary"></i>Padrões de Desacelerações</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="info-box">
+                                    <h6>Precoces</h6>
+                                    <p class="mb-0">Espelhamento da contração. Geralmente benignas.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="warning-box">
+                                    <h6>Variáveis</h6>
+                                    <p class="mb-0">Forma e tempo variáveis. Avaliar profundidade e frequência.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="danger-box">
+                                    <h6>Tardias</h6>
+                                    <p class="mb-0">Iniciam após pico da contração. Associadas a sofrimento fetal.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mt-4"><i class="fas fa-procedures me-2 text-primary"></i>Perfil Biofísico Fetal (PBF)</h4>
+                        <p>Avaliação por ultrassom que combina 5 parâmetros (cada vale 0 ou 2 pontos):</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul>
+                                    <li><strong>Movimentos respiratórios fetais</strong>: ≥1 episódio de ≥30 segundos em 30 min</li>
+                                    <li><strong>Movimentos corporais</strong>: ≥3 movimentos distintos em 30 min</li>
+                                    <li><strong>Tônus fetal</strong>: ≥1 episódio de extensão/flexão de membros</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul>
+                                    <li><strong>Reatividade da FCF</strong>: ≥2 acelerações de ≥15 bpm por ≥15 segundos em 30 min</li>
+                                    <li><strong>Volume de líquido amniótico</strong>: bolsão vertical único ≥2 cm ou ILA ≥5 cm</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box">
+                            <h5><i class="fas fa-calculator me-2"></i>Interpretação do PBF</h5>
+                            <ul class="mb-0">
+                                <li><strong>8-10 pontos</strong>: Normal (repetir em 7 dias em gestações de alto risco)</li>
+                                <li><strong>6 pontos</strong>: Equívoco (repetir em 24h ou considerar outras variáveis)</li>
+                                <li><strong>4 pontos</strong>: Anormal (considerar término da gestação)</li>
+                                <li><strong>0-2 pontos</strong>: Muito anormal (término da gestação urgente)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="quiz-container mt-4">
+                            <h5><i class="fas fa-question-circle me-2"></i>Teste Seu Conhecimento</h5>
+                            <div class="quiz-question">Qual é a variabilidade normal da frequência cardíaca fetal?</div>
+                            <div class="quiz-option" data-correct="false">A) 1-5 bpm</div>
+                            <div class="quiz-option" data-correct="true">B) 6-25 bpm</div>
+                            <div class="quiz-option" data-correct="false">C) 30-50 bpm</div>
+                            <div class="quiz-option" data-correct="false">D) 50-100 bpm</div>
+                            <div class="quiz-feedback" id="quiz3Feedback">
+                                <strong>Resposta Correta: B)</strong> A variabilidade normal da frequência cardíaca fetal é de 6 a 25 batimentos por minuto. Variabilidade reduzida (&lt;5 bpm) pode indicar depressão do SNC fetal, enquanto variabilidade excessiva (&gt;25 bpm) pode indicar estimulação simpática.
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary mt-2" id="checkQuiz3">Verificar Resposta</button>
+                        </div>
+                    `,
+                    subsections: [
+                        {id: "cardiotocografia", title: "Cardiotocografia"},
+                        {id: "perfil-biofisico", title: "Perfil Biofísico"},
+                        {id: "doppler-fetal", title: "Doppler Fetal"}
+                    ]
+                },
+                {
+                    id: "farmacia-obstetrica",
+                    title: "Farmácia Obstétrica",
+                    category: "Medicamentos",
+                    content: `
+                        <h2 class="section-title">Farmácia Obstétrica</h2>
+                        <p class="lead">Medicamentos seguros, contraindicados e doses mais comuns na gestação e lactação.</p>
+                        
+                        <h4><i class="fas fa-capsules me-2 text-primary"></i>Classificação de Risco Fetal (FDA)</h4>
+                        <p><em>Nota: A FDA substituiu esta classificação por um sistema mais descritivo, mas ainda é muito cobrada em provas.</em></p>
+                        
+                        <table class="content-table">
+                            <thead>
+                                <tr>
+                                    <th>Categoria</th>
+                                    <th>Descrição</th>
+                                    <th>Exemplos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>A</strong></td>
+                                    <td>Estudos controlados não demonstram risco</td>
+                                    <td>Ácido fólico, levotiroxina</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>B</strong></td>
+                                    <td>Sem evidência de risco em humanos</td>
+                                    <td>Paracetamol, penicilinas, metformina</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>C</strong></td>
+                                    <td>Risco não pode ser descartado</td>
+                                    <td>Fluconazol, corticoides, omeprazol</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>D</strong></td>
+                                    <td>Evidência de risco fetal</td>
+                                    <td>Hidantoína, lítio, IECA (2º-3º trim)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>X</strong></td>
+                                    <td>Contraindicado na gravidez</td>
+                                    <td>Metotrexato, misoprostol (exceto indução), varfarina</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4 class="mt-4"><i class="fas fa-tablets me-2 text-primary"></i>Medicamentos Mais Comuns na Obstetrícia</h4>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-box mb-3">
+                                    <h6>Analgésicos/Antitérmicos</h6>
+                                    <ul class="mb-0">
+                                        <li><strong>Paracetamol</strong>: 500-1000 mg a cada 6-8h (máx 4g/dia)</li>
+                                        <li><strong>Dipirona</strong>: 500 mg a cada 6h (evitar no 1º trimestre)</li>
+                                        <li><strong>Evitar</strong>: AINEs no 3º trimestre (fechamento do ducto arterial)</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="info-box mb-3">
+                                    <h6>Antibióticos Seguros</h6>
+                                    <ul class="mb-0">
+                                        <li><strong>Penicilinas</strong>: Amoxicilina 500 mg 8/8h</li>
+                                        <li><strong>Cefalosporinas</strong>: Cefalexina 500 mg 6/6h</li>
+                                        <li><strong>Eritromicina</strong> (exceto estolato)</li>
+                                        <li><strong>Clindamicina</strong> 300-450 mg 6/6h</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="warning-box mb-3">
+                                    <h6>Antibióticos com Restrições</h6>
+                                    <ul class="mb-0">
+                                        <li><strong>Sulfas</strong>: evitar no 3º trim (icterícia neonatal)</li>
+                                        <li><strong>Aminoglicosídeos</strong>: usar com cautela (ototoxicidade)</li>
+                                        <li><strong>Quinolonas</strong>: evitar (artropatia em animais)</li>
+                                        <li><strong>Tetraciclinas</strong>: contraindicadas (dentes e ossos)</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="info-box">
+                                    <h6>Anti-hipertensivos na Gestação</h6>
+                                    <ul class="mb-0">
+                                        <li><strong>Metildopa</strong>: 250-500 mg 8/8h (primeira escolha)</li>
+                                        <li><strong>Labetalol</strong>: 100-200 mg 8/8h</li>
+                                        <li><strong>Nifedipina</strong>: 10-20 mg 8/8h (liberação lenta)</li>
+                                        <li><strong>Hidralazina</strong>: reserva para crises hipertensivas</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mt-4"><i class="fas fa-ban me-2 text-danger"></i>Medicamentos Teratogênicos (Evitar)</h4>
+                        <div class="danger-box">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li><strong>Inibidores da ECA</strong> e BRA: 2º-3º trim - oligoâmnio, hipoplasia pulmonar</li>
+                                        <li><strong>Anticonvulsivantes</strong> (valproato, carbamazepina) - defeitos do tubo neural</li>
+                                        <li><strong>Isotretinoína</strong> - múltiplas malformações</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li><strong>Misoprostol</strong> (exceto para indução) - defeitos de redução de membros</li>
+                                        <li><strong>Metotrexato</strong> - aborto, malformações</li>
+                                        <li><strong>Varfarina</strong> - embriopatia varfarinica (1º trim), hemorragia fetal</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box mt-4">
+                            <h5><i class="fas fa-lightbulb me-2"></i>Princípio Básico</h5>
+                            <p class="mb-0">"Usar a menor dose efetiva pelo menor tempo possível". Sempre pesar risco-benefício. Em dúvida, consultar bases como <strong>LactMed</strong> (NIH) e <strong>Reprotrisk</strong>.</p>
+                        </div>
+                    `,
+                    subsections: [
+                        {id: "classificacao-fda", title: "Classificação FDA"},
+                        {id: "medicamentos-comuns", title: "Medicamentos Comuns"},
+                        {id: "teratogenicos", title: "Teratogênicos"}
+                    ]
+                }
+            ];
+
+            // Combinar conteúdo original e expandido
+            const allContent = [...contentData, ...additionalContent];
+            
+            // ==================== FUNÇÕES UTILITÁRIAS ====================
+            
+            // Função para carregar o conteúdo dinamicamente
+            function loadContent(contentId) {
+                const contentArea = document.getElementById('dynamicContent');
+                const welcomeSection = document.getElementById('welcomeSection');
+                const content = allContent.find(item => item.id === contentId);
+                
+                if (welcomeSection) welcomeSection.style.display = 'none';
+                if (contentArea) contentArea.style.display = 'block';
+                
+                if (content && contentArea) {
+                    contentArea.innerHTML = `
+                        <div class="section-card">
+                            <div class="section-header d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge-category">${content.category}</span>
+                                    <h2 class="section-title mt-2">${content.title}</h2>
+                                </div>
+                                <button class="btn btn-outline-primary btn-sm" id="toggleProgress">
+                                    <i class="far fa-check-circle me-1"></i> Marcar como Estudado
+                                </button>
+                            </div>
+                            ${content.content}
+                        </div>
+                    `;
+                    
+                    // Adicionar eventos aos quizzes desta seção
+                    setupQuizEvents();
+                    
+                    // Atualizar navegação ativa
+                    updateActiveNav(contentId);
+                    
+                    // Atualizar progresso
+                    updateProgressItem(contentId);
+                    
+                    // Salvar última seção visualizada
+                    localStorage.setItem('lastSection', contentId);
+                }
+            }
+            
+            // Função para configurar eventos dos quizzes
+            function setupQuizEvents() {
+                // Quiz 1
+                const checkQuiz1 = document.getElementById('checkQuiz1');
+                if (checkQuiz1) {
+                    checkQuiz1.addEventListener('click', function() {
+                        const options = document.querySelectorAll('.quiz-option');
+                        const feedback = document.getElementById('quiz1Feedback');
+                        
+                        options.forEach(option => {
+                            if (option.getAttribute('data-correct') === 'true') {
+                                option.classList.add('correct');
+                            } else {
+                                option.classList.add('incorrect');
+                            }
+                        });
+                        
+                        if (feedback) feedback.classList.add('show');
+                    });
+                }
+                
+                // Quiz 2
+                const checkQuiz2 = document.getElementById('checkQuiz2');
+                if (checkQuiz2) {
+                    checkQuiz2.addEventListener('click', function() {
+                        const options = document.querySelectorAll('.quiz-option');
+                        const feedback = document.getElementById('quiz2Feedback');
+                        
+                        options.forEach(option => {
+                            if (option.getAttribute('data-correct') === 'true') {
+                                option.classList.add('correct');
+                            } else {
+                                option.classList.add('incorrect');
+                            }
+                        });
+                        
+                        if (feedback) feedback.classList.add('show');
+                    });
+                }
+                
+                // Quiz 3
+                const checkQuiz3 = document.getElementById('checkQuiz3');
+                if (checkQuiz3) {
+                    checkQuiz3.addEventListener('click', function() {
+                        const options = document.querySelectorAll('.quiz-option');
+                        const feedback = document.getElementById('quiz3Feedback');
+                        
+                        options.forEach(option => {
+                            if (option.getAttribute('data-correct') === 'true') {
+                                option.classList.add('correct');
+                            } else {
+                                option.classList.add('incorrect');
+                            }
+                        });
+                        
+                        if (feedback) feedback.classList.add('show');
+                    });
+                }
+            }
+            
+            // Função para construir a navegação
+            function buildNavigation() {
+                const navTree = document.getElementById('navTree');
+                
+                allContent.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'nav-item';
+                    
+                    const link = document.createElement('a');
+                    link.href = '#';
+                    link.textContent = item.title;
+                    link.dataset.id = item.id;
+                    
+                    if (item.subsections && item.subsections.length > 0) {
+                        li.className = 'has-children';
+                        link.innerHTML = `${item.title} <span class="toggle-children"><i class="fas fa-chevron-right"></i></span>`;
+                        
+                        const childList = document.createElement('ul');
+                        childList.className = 'children';
+                        
+                        item.subsections.forEach(sub => {
+                            const childLi = document.createElement('li');
+                            const childLink = document.createElement('a');
+                            childLink.href = '#';
+                            childLink.textContent = sub.title;
+                            childLink.dataset.id = item.id;
+                            childLink.dataset.sub = sub.id;
+                            childLi.appendChild(childLink);
+                            childList.appendChild(childLi);
+                        });
+                        
+                        li.appendChild(link);
+                        li.appendChild(childList);
+                    } else {
+                        li.appendChild(link);
+                    }
+                    
+                    navTree.appendChild(li);
+                });
+                
+                // Adicionar eventos de clique aos itens da navegação
+                document.querySelectorAll('#navTree a').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const contentId = this.dataset.id;
+                        
+                        // Se for um item filho, rolar para a subseção específica
+                        if (this.dataset.sub) {
+                            // Por enquanto, apenas carrega o conteúdo principal
+                            loadContent(contentId);
+                        } else {
+                            loadContent(contentId);
+                        }
+                        
+                        // Fechar sidebar em dispositivos móveis
+                        if (window.innerWidth < 992) {
+                            toggleSidebar();
+                        }
+                    });
+                });
+                
+                // Adicionar eventos para expandir/colapsar subitens
+                document.querySelectorAll('.toggle-children').forEach(toggle => {
+                    toggle.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const children = this.parentElement.parentElement.querySelector('.children');
+                        if (children) {
+                            children.classList.toggle('show');
+                            this.classList.toggle('rotated');
+                        }
+                    });
+                });
+            }
+            
+            // Função para atualizar navegação ativa
+            function updateActiveNav(contentId) {
+                document.querySelectorAll('#navTree a').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.id === contentId) {
+                        link.classList.add('active');
+                        
+                        // Expandir pai se for um item filho
+                        const parentLi = link.closest('.has-children');
+                        if (parentLi) {
+                            const children = parentLi.querySelector('.children');
+                            const toggle = parentLi.querySelector('.toggle-children');
+                            if (children) {
+                                children.classList.add('show');
+                                if (toggle) toggle.classList.add('rotated');
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Função para construir o rastreador de progresso
+            function buildProgressTracker() {
+                const progressTracker = document.getElementById('progressTracker');
+                
+                allContent.forEach(item => {
+                    const progressItem = document.createElement('div');
+                    progressItem.className = 'progress-item';
+                    progressItem.dataset.id = item.id;
+                    
+                    const checkboxId = `progress-${item.id}`;
+                    const isCompleted = localStorage.getItem(`progress-${item.id}`) === 'true';
+                    
+                    progressItem.innerHTML = `
+                        <input type="checkbox" id="${checkboxId}" ${isCompleted ? 'checked' : ''}>
+                        <label for="${checkboxId}">${item.title}</label>
+                    `;
+                    
+                    if (isCompleted) {
+                        progressItem.classList.add('completed');
+                    }
+                    
+                    progressTracker.appendChild(progressItem);
+                    
+                    // Adicionar evento à checkbox
+                    const checkbox = progressItem.querySelector('input');
+                    checkbox.addEventListener('change', function() {
+                        const itemId = this.id.replace('progress-', '');
+                        localStorage.setItem(`progress-${itemId}`, this.checked);
+                        
+                        if (this.checked) {
+                            progressItem.classList.add('completed');
+                        } else {
+                            progressItem.classList.remove('completed');
+                        }
+                        
+                        updateOverallProgress();
+                    });
+                });
+                
+                updateOverallProgress();
+            }
+            
+            // Função para atualizar item de progresso específico
+            function updateProgressItem(contentId) {
+                const progressItem = document.querySelector(`.progress-item[data-id="${contentId}"]`);
+                if (progressItem) {
+                    const checkbox = progressItem.querySelector('input');
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        localStorage.setItem(`progress-${contentId}`, 'true');
+                        progressItem.classList.add('completed');
+                        updateOverallProgress();
+                    }
+                }
+            }
+            
+            // Função para atualizar progresso geral
+            function updateOverallProgress() {
+                const totalItems = allContent.length;
+                let completedItems = 0;
+                
+                allContent.forEach(item => {
+                    if (localStorage.getItem(`progress-${item.id}`) === 'true') {
+                        completedItems++;
+                    }
+                });
+                
+                const progressPercentage = Math.round((completedItems / totalItems) * 100);
+                const progressTitle = document.querySelector('.utility-title');
+                if (progressTitle) {
+                    progressTitle.innerHTML = `<i class="fas fa-tools me-2"></i>Ferramentas <span class="badge bg-primary ms-2">${progressPercentage}%</span>`;
+                }
+            }
+            
+            // ==================== CALCULADORAS ====================
+            
+            // Calculadora de DPP
+            document.getElementById('calculateDPP').addEventListener('click', function() {
+                const dumInput = document.getElementById('dumInput').value;
+                const cycleLength = parseInt(document.getElementById('cycleLength').value);
+                
+                if (!dumInput) {
+                    alert('Por favor, insira a data da última menstruação.');
+                    return;
+                }
+                
+                const dum = new Date(dumInput);
+                const dpp = new Date(dum);
+                
+                // Regra de Naegele: DUM + 7 dias - 3 meses + 1 ano
+                dpp.setDate(dpp.getDate() + 7);
+                dpp.setMonth(dpp.getMonth() - 3);
+                dpp.setFullYear(dpp.getFullYear() + 1);
+                
+                // Ajuste para ciclos diferentes de 28 dias
+                if (cycleLength !== 28) {
+                    const diffDays = cycleLength - 28;
+                    dpp.setDate(dpp.getDate() + diffDays);
+                }
+                
+                // Calcular idade gestacional
+                const today = new Date();
+                const diffTime = Math.abs(today - dum);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                const weeks = Math.floor(diffDays / 7);
+                const days = diffDays % 7;
+                
+                const dppFormatted = dpp.toLocaleDateString('pt-BR');
+                
+                document.getElementById('dppResult').innerHTML = `
+                    <strong>Data Provável do Parto:</strong> ${dppFormatted}<br>
+                    <strong>Idade Gestacional:</strong> ${weeks} semanas e ${days} dias
+                `;
+                document.getElementById('dppResult').style.display = 'block';
+            });
+            
+            // Calculadora de IMC
+            document.getElementById('calculateBMI').addEventListener('click', function() {
+                const weight = parseFloat(document.getElementById('weightInput').value);
+                const height = parseFloat(document.getElementById('heightInput').value);
+                
+                if (!weight || !height || height <= 0) {
+                    alert('Por favor, insira valores válidos para peso e altura.');
+                    return;
+                }
+                
+                const bmi = weight / (height * height);
+                let classification = '';
+                let color = '';
+                
+                if (bmi < 18.5) {
+                    classification = 'Baixo peso';
+                    color = 'warning';
+                } else if (bmi < 25) {
+                    classification = 'Peso normal';
+                    color = 'success';
+                } else if (bmi < 30) {
+                    classification = 'Sobrepeso';
+                    color = 'warning';
+                } else {
+                    classification = 'Obesidade';
+                    color = 'danger';
+                }
+                
+                document.getElementById('bmiResult').innerHTML = `
+                    <strong>IMC:</strong> ${bmi.toFixed(1)} kg/m²<br>
+                    <strong>Classificação:</strong> <span class="text-${color}">${classification}</span>
+                `;
+                document.getElementById('bmiResult').style.display = 'block';
+            });
+            
+            // ==================== GERENCIAMENTO DE ANOTAÇÕES ====================
+            
+            // Carregar anotações salvas
+            const notesTextarea = document.getElementById('notesTextarea');
+            const savedNotes = localStorage.getItem('obstetricNotes');
+            if (savedNotes) {
+                notesTextarea.value = savedNotes;
+            }
+            
+            // Salvar anotações
+            document.getElementById('saveNotes').addEventListener('click', function() {
+                localStorage.setItem('obstetricNotes', notesTextarea.value);
+                this.innerHTML = '<i class="fas fa-check me-1"></i>Salvo!';
+                this.classList.remove('btn-outline-primary');
+                this.classList.add('btn-success');
+                
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-save me-1"></i>Salvar';
+                    this.classList.remove('btn-success');
+                    this.classList.add('btn-outline-primary');
+                }, 2000);
+            });
+            
+            // Limpar anotações
+            document.getElementById('clearNotes').addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja limpar todas as anotações?')) {
+                    notesTextarea.value = '';
+                    localStorage.removeItem('obstetricNotes');
+                }
+            });
+            
+            // ==================== FUNCIONALIDADES DE UI ====================
+            
+            // Alternar sidebar
+            document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
+            
+            function toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.toggle('collapsed');
+                
+                const icon = document.getElementById('sidebarToggle').querySelector('i');
+                if (sidebar.classList.contains('collapsed')) {
+                    icon.className = 'fas fa-bars';
+                } else {
+                    icon.className = 'fas fa-times';
+                }
+            }
+            
+            // Alternar painel utilitário
+            document.getElementById('utilityToggle').addEventListener('click', toggleUtilityPanel);
+            
+            function toggleUtilityPanel() {
+                const utilityPanel = document.getElementById('utilityPanel');
+                utilityPanel.classList.toggle('collapsed');
+                
+                const icon = document.getElementById('utilityToggle').querySelector('i');
+                if (utilityPanel.classList.contains('collapsed')) {
+                    icon.className = 'fas fa-calculator';
+                } else {
+                    icon.className = 'fas fa-times';
+                }
+            }
+            
+            // Alternar modo escuro/claro
+            document.getElementById('darkModeToggle').addEventListener('change', function() {
+                document.body.classList.toggle('dark-mode', this.checked);
+                localStorage.setItem('darkMode', this.checked);
+            });
+            
+            // Carregar preferência de modo escuro
+            const darkModePref = localStorage.getItem('darkMode') === 'true';
+            if (darkModePref) {
+                document.getElementById('darkModeToggle').checked = true;
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Busca
+            document.getElementById('searchBtn').addEventListener('click', performSearch);
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            function performSearch() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+                if (!searchTerm) return;
+                
+                // Implementação simples de busca - em versão real, seria mais sofisticada
+                let foundContent = null;
+                
+                for (const content of allContent) {
+                    if (content.title.toLowerCase().includes(searchTerm) || 
+                        content.content.toLowerCase().includes(searchTerm) ||
+                        content.category.toLowerCase().includes(searchTerm)) {
+                        foundContent = content;
+                        break;
+                    }
+                }
+                
+                if (foundContent) {
+                    loadContent(foundContent.id);
+                    document.getElementById('searchInput').value = '';
+                } else {
+                    alert('Nenhum resultado encontrado para: ' + searchTerm);
+                }
+            }
+            
+            // Botão "Começar a Leitura"
+            document.getElementById('startReadingBtn').addEventListener('click', function() {
+                loadContent('fundamentos-datas');
+            });
+            
+            // Carregar última seção visualizada
+            const lastSection = localStorage.getItem('lastSection');
+            if (lastSection) {
+                loadContent(lastSection);
+            }
+            
+            // ==================== INICIALIZAÇÃO ====================
+            
+            // Construir navegação e rastreador de progresso
+            buildNavigation();
+            buildProgressTracker();
+            
+            // Adicionar evento para marcar como estudado
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.id === 'toggleProgress') {
+                    const currentSection = localStorage.getItem('lastSection');
+                    if (currentSection) {
+                        updateProgressItem(currentSection);
+                        e.target.innerHTML = '<i class="fas fa-check-circle me-1"></i> Marcado!';
+                        e.target.classList.remove('btn-outline-primary');
+                        e.target.classList.add('btn-success');
+                        
+                        setTimeout(() => {
+                            e.target.innerHTML = '<i class="far fa-check-circle me-1"></i> Marcar como Estudado';
+                            e.target.classList.remove('btn-success');
+                            e.target.classList.add('btn-outline-primary');
+                        }, 2000);
+                    }
+                }
+            });
+            
+            // Inicializar quizzes
+            setupQuizEvents();
+        });
+    </script>
+</body>
+</html>
